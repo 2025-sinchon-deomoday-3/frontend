@@ -14,7 +14,8 @@ CSS Reset/Normalize: body, html, button 등 기본 HTML 요소들의 스타일 �
   color-scheme: light dark;
 
   /* ————————————————— font families  ————————————————— */
-  --font-family-primary: "Pretendard Variable", system-ui, "Segoe UI", Arial;
+  --font-main: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    system-ui, sans-serif;
   --font-family-secondary: "Inter", system-ui, "Segoe UI", Roboto, Arial;
   --font-family-tertiary: "Manrope", system-ui, "Segoe UI", Roboto, Arial;
 
@@ -38,13 +39,27 @@ CSS Reset/Normalize: body, html, button 등 기본 HTML 요소들의 스타일 �
   --lh-default: 1.5;
 
   /* ———————— semantic typographic tokens ———————— */
-  --heading-font-family: var(--font-family-primary);
-  --body-font-family: var(--font-family-primary);
+  --heading-font-family: var(--font-main);
+  --body-font-family: var(--font-main);
   --ui-font-family: var(--font-family-secondary);
+
+  /* ——————————————————— colors  ——————————————————— */
+
+  --deep-blue: #0b3e99;
+  --blue: #115bca;
+  --red: #ca1111;
+  --black: #000000;
+  --gray: #a5a5a5;
+  --light-gray: #d9d9d9;
+  --sub-btn: #f4f4f4;
+  --text-input: #fcfcfc;
+  --white: #ffffff;
+  --visiting: #aa0094;
+  --exchange: #00836b;
 }
 
 /*
- ———————————————————————————————————————————————————————————————————— 
+ ——————————————————————————————————————————————————————
 
  ⭐ CSS Reset - 마진/패딩 초기화 : comment로 달아준 것(1)! ⭐ 
  */
@@ -81,11 +96,6 @@ a:hover {
   color: #535bf2;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -112,7 +122,6 @@ button:focus-visible {
   font-weight: var(--fw-bold);
   font-size: var(--fs-h1);
   line-height: var(--lh-default);
-  margin: 0 0 0.5em 0;
   color: var(--text-primary, var(--color-black));
 }
 
@@ -121,7 +130,6 @@ button:focus-visible {
   font-weight: var(--fw-bold);
   font-size: var(--fs-h2);
   line-height: var(--lh-default);
-  margin: 0 0 0.5em 0;
   color: var(--text-primary, var(--color-black));
 }
 
@@ -139,7 +147,6 @@ button:focus-visible {
   font-weight: var(--fw-bold);
   font-size: var(--fs-h4);
   line-height: var(--lh-default);
-  margin: 0 0 0.5em 0;
   color: var(--text-primary, var(--color-black));
 }
 
@@ -148,7 +155,6 @@ button:focus-visible {
   font-weight: var(--fw-bold);
   font-size: var(--fs-h5);
   line-height: var(--lh-default);
-  margin: 0 0 0.5em 0;
   color: var(--text-primary, var(--color-black));
 }
 
@@ -159,7 +165,6 @@ button:focus-visible {
   font-weight: var(--fw-md);
   font-size: var(--fs-body1);
   line-height: var(--lh-default);
-  margin: 0 0 1em 0;
   color: var(--text-primary, var(--color-black));
 }
 
@@ -168,7 +173,6 @@ button:focus-visible {
   font-weight: var(--fw-df);
   font-size: var(--fs-body2);
   line-height: var(--lh-default);
-  margin: 0 0 0.75em 0;
   color: var(--text-primary, var(--color-black));
 }
 
@@ -177,7 +181,6 @@ button:focus-visible {
   font-weight: var(--fw-df);
   font-size: var(--fs-body3);
   line-height: var(--lh-default);
-  margin: 0 0 0.5em 0;
   color: var(--text-secondary, var(--color-gray));
 }
 
