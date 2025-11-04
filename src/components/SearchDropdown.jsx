@@ -73,7 +73,7 @@ const SearchDropdown = ({
             >
               <path
                 d="M7.50502 1.68204e-06C8.91701 0.000443901 10.3002 0.399463 11.4954 1.15116C12.6907 1.90285 13.6495 2.97669 14.2615 4.24914C14.8735 5.52158 15.1139 6.94095 14.955 8.34397C14.7962 9.74698 14.2444 11.0766 13.3634 12.18L18.095 16.9117L18.2017 17.0417C18.3079 17.2019 18.3554 17.394 18.3362 17.5853C18.317 17.7766 18.2323 17.9554 18.0963 18.0913C17.9604 18.2273 17.7816 18.312 17.5903 18.3312C17.399 18.3504 17.2069 18.3029 17.0467 18.1967L16.915 18.09L12.185 13.3567C11.2491 14.1053 10.1475 14.6188 8.97228 14.8541C7.79711 15.0893 6.58266 15.0396 5.43069 14.7089C4.27872 14.3782 3.22277 13.7763 2.3513 12.9535C1.47983 12.1308 0.81823 11.1111 0.421918 9.98007C0.0256054 8.849 -0.0938744 7.63942 0.073488 6.45267C0.24085 5.26592 0.690181 4.13656 1.38384 3.1592C2.07749 2.18184 2.99527 1.38495 4.06029 0.835291C5.1253 0.285627 6.30653 -0.000800909 7.50502 1.68204e-06ZM7.50502 1.66667C6.73898 1.66667 5.98044 1.81755 5.2727 2.1107C4.56497 2.40386 3.92191 2.83354 3.38023 3.37521C2.83856 3.91689 2.40888 4.55995 2.11573 5.26768C1.82257 5.97541 1.67169 6.73396 1.67169 7.5C1.67169 8.26605 1.82257 9.02459 2.11573 9.73232C2.40888 10.4401 2.83856 11.0831 3.38023 11.6248C3.92191 12.1665 4.56497 12.5961 5.2727 12.8893C5.98044 13.1825 6.73898 13.3333 7.50502 13.3333C9.05212 13.3333 10.5359 12.7188 11.6298 11.6248C12.7238 10.5308 13.3384 9.0471 13.3384 7.5C13.3384 5.95291 12.7238 4.46917 11.6298 3.37521C10.5359 2.28125 9.05212 1.66667 7.50502 1.66667Z"
-                fill="#6B7280"
+                fill="var(--gray)"
               />
             </SearchIcon>
           </SearchBox>
@@ -109,8 +109,11 @@ const DropdownButton = styled.button`
   border: 1px solid var(--light-gray, #D9D9D9);
   border-radius: 0.375rem;
   cursor: pointer;
-  min-width: 9.5625rem;
+  min-width: 35rem;
+  height: 3rem;
+  
   text-align: left;
+  color: var(--black, #000);
 
   display: flex;
   justify-content: space-between;
@@ -130,39 +133,63 @@ const ArrowIcon = styled.svg.attrs({
 
 const DropdownList = styled.ul`
   list-style: none;
-  margin: 0;
-  padding: 0;
 
   position: absolute;
+
   background: var(--white, #FFF);
   border: 1px solid var(--light-gray, #D9D9D9);
   border-radius: 0.375rem;
   width: 100%;
   z-index: 10;
   overflow: hidden;
+  color: var(--black, #000);
+  text-align: left;
 `;
 
 const SearchBox = styled.div`
+  position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
 `;
 
 const SearchInput = styled.input`
+  border-radius: 3rem;
+  background-color: #f2f2f2;
   border: none;
   outline: none;
-  font-size: 0.9rem;
-  color: #000;
+
+  width: 100%;
+  height: 2.375rem;
+
+  margin: 0.5rem;
+  padding: 0 2.3rem 0 1rem;
+
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--black);
+
 
   &::placeholder {
-    color: #999;
+    color: var(--gray);
+
   }
 `;
 
 const SearchIcon = styled.svg`
   flex-shrink: 0;
+  position: absolute;
+  right: 1.5rem;       /* input 내부 오른쪽 여백 */
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const DropdownItem = styled.li`
+  height: 3rem;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+
   cursor: pointer;
 
   &:hover {
@@ -171,7 +198,10 @@ const DropdownItem = styled.li`
 `;
 
 const DropdownEmpty = styled.div`
-  padding: 8px 12px;
+  height: 3rem;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
   color: #999;
-  text-align: center;
+  text-align: left;
 `;

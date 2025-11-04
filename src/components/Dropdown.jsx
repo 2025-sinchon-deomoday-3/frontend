@@ -70,7 +70,10 @@ const DropdownButton = styled.button`
   border-radius: 0.375rem;
   cursor: pointer;
   min-width: 9.5625rem;
+  height: 3rem;
+
   text-align: left;
+  color: var(--black, #000);
 
   display: flex;
   justify-content: space-between;
@@ -90,8 +93,6 @@ const ArrowIcon = styled.svg.attrs({
 
 const DropdownList = styled.ul`
   list-style: none;
-  margin: 0;
-  padding: 0;
 
   position: absolute;
   background: var(--white, #FFF);
@@ -100,9 +101,19 @@ const DropdownList = styled.ul`
   width: 100%;
   z-index: 10;
   overflow: hidden;
+  color: var(--black, #000);
+  text-align: left;
 `;
 
 const DropdownItem = styled.li`
+  height: 3rem;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--light-gray, #D9D9D9);
+  }
   cursor: pointer;
 
   &:hover {
