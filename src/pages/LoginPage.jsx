@@ -108,7 +108,7 @@ const LoginPage = () => {
 
   return(
     <Wrapper>
-        <img src="/public/icons/Logo.svg" alt="로고"/>
+        <img src="/icons/Logo.svg" alt="로고"/>
         <UsernameWrapper>
           <Inputfield
             ref={usernameRef}
