@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import SquareButton from "../components/button/SquareButton"
-import Inputfield from "../components/Inputfield"
+import SquareButton from "../components/button/SquareButton";
+import Inputfield from "../components/Inputfield";
 
 const onClick = () => {
 
