@@ -47,10 +47,8 @@ const StyledInput = styled.input`
   height: 3rem;
   padding: 0 1rem;
 
-  border-radius: 0.375rem;
-  border: 1px solid
-    ${({ $isFocused }) =>
-      $isFocused ? "var(--blue, #115BCA)" : "var(--light-gray, #D9D9D9)"};
+  border-radius: 0.5rem;
+  border: 1px solid var(--light-gray, #D9D9D9);
 
   background: var(--white, #fff);
   color: var(--black, #000);
@@ -66,7 +64,11 @@ const StyledInput = styled.input`
   }
 
   &:hover {
-    border-color: var(--blue, #115bca);
+    border-color: var(--gray);
+  }
+
+  &:focus{
+    outline: 1px solid var(--blue, #115BCA);
   }
 
   /* 커스텀 스타일 적용 */
