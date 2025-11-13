@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, matchPath } from "react-router-dom";
 import './App.css'
+//Layout
 import MainLayout from './layouts/MainLayout';
 import UploadLayout from './layouts/UploadLayout';
 import BackLayout from './layouts/BackLayout';
+//Login, Signup
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import SignupCompletePage from "./pages/SignupCompletePage";
 
 function App() {
 
@@ -30,6 +33,7 @@ function App() {
           {/* Topbar X */}
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/signup" element={<SignupPage/>}/>
+          <Route path="/signup/complete" element={<SignupCompletePage/>}/>
         </Routes>
       </Router>
     </>

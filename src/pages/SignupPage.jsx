@@ -7,11 +7,6 @@ import Inputfield from "../components/Inputfield";
 import SearchDropdown from "../components/SearchDropdown";
 import Dropdown from "../components/Dropdown";
 
-const onClick = () => {
-    // 회원가입 로직 추가 예정
-    console.log("회원가입");
-}
-
 // 회원가입 페이지용 인풋 스타일
 const signupInputStyle = {
   width: "35rem",
@@ -99,6 +94,14 @@ const typeList = [
 ]
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    // 회원가입 로직 추가 예정
+    console.log("회원가입");
+    navigate("/signup/complete");
+}
+
   const [id, setId] = useState(""); // 아이디 값
   const [idError, setIdError] = useState(""); // 아이디 에러 메시지
 
