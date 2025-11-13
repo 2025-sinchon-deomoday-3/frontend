@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import styled from "styled-components";
 
 
-const CircleButton = ({
+const CircleButton = forwardRef(({
   children,       // 버튼 안의 내용
   onClick,        // 클릭 시 실행할 함수
   disabled = false, // 비활성화 여부
-  style = {}       // 인라인 스타일 오버라이드
-}) => {
+  style = {},       // 인라인 스타일 오버라이드
+  onKeyDown, // 키보드 이벤트를 받을 props
+}, ref) => {
     const [isClickedIn, setIsClickedIn] = useState(false);
     const handleClick = (e) => {
         setIsClickedIn((prev) => !prev);   // 내부 토글
         onClick?.(e);                   // 외부 onClick 실행
+    };
+
+    const handleKeyDown = (e) => {
+        // 엔터키나 스페이스키로 버튼 클릭
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick(e);
+        }
+        // 외부 onKeyDown 핸들러도 실행
+        onKeyDown?.(e);
     };
     
     return (
@@ -20,11 +31,14 @@ const CircleButton = ({
         $isClickedIn={isClickedIn}
         disabled={disabled}
         style={style}
+        onKeyDown={handleKeyDown} // 내부 키보드 이벤트 처리
+        ref={ref} // ref 전달
+        tabIndex={0} // 키보드 포커스 허용
         >
             {children}
         </StyledCircleButton>
     );
-}
+});
 
 export default CircleButton;
 
@@ -53,6 +67,11 @@ const StyledCircleButton = styled.button`
     &:hover {
         cursor: pointer;
         filter: brightness(0.9);
+    }
+
+    &:focus {
+        outline: 1px solid var(--blue, #115BCA);
+        outline-offset: 2px;
     }
 
     &:disabled {

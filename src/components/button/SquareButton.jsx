@@ -42,6 +42,11 @@ const StyledButton = styled.button`
         filter: brightness(0.9);
     }
 
+    &:focus {
+        outline: 1px solid var(--blue, #115BCA);
+        outline-offset: 2px;
+    }
+
     &:disabled {
         background: var(--gray, #A5A5A5);
         cursor: not-allowed;
