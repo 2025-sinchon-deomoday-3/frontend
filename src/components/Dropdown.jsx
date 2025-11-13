@@ -1,7 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
-const Dropdown = ({ options = [], placeholder = "선택하세요", onSelect }) => {
+const Dropdown = ({ 
+  options = [], 
+  placeholder = "선택하세요", 
+  onSelect,
+  customStyle, // 추가 스타일을 받을 props
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const ref = useRef(null);
@@ -27,7 +32,10 @@ const Dropdown = ({ options = [], placeholder = "선택하세요", onSelect }) =
 
   return (
     <DropdownWrapper ref={ref}>
-      <DropdownButton onClick={toggleDropdown}>
+      <DropdownButton 
+        onClick={toggleDropdown}
+        $customStyle={customStyle} // 커스텀 스타일 전달
+      >
         <span>{selected ? selected.label : placeholder}</span>
         <ArrowIcon $isOpen={isOpen}>
           <path
@@ -67,17 +75,33 @@ const DropdownWrapper = styled.div`
 const DropdownButton = styled.button`
   background: var(--white, #FFF);
   border: 1px solid var(--light-gray, #D9D9D9);
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   min-width: 9.5625rem;
   height: 3rem;
 
+  padding: 0 1rem;
+
   text-align: left;
   color: var(--black, #000);
+  font-size: 1rem;
+  font-weight: 400;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &:hover {
+      cursor: pointer;
+      filter: brightness(0.9);
+  }
+
+  &:focus {
+      outline: 1px solid var(--blue, #115BCA);
+  }
+
+  /* 커스텀 스타일 적용 */
+  ${({ $customStyle }) => $customStyle && $customStyle}
 `;
 
 const ArrowIcon = styled.svg.attrs({
@@ -97,12 +121,14 @@ const DropdownList = styled.ul`
   position: absolute;
   background: var(--white, #FFF);
   border: 1px solid var(--light-gray, #D9D9D9);
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   width: 100%;
   z-index: 10;
   overflow: hidden;
   color: var(--black, #000);
   text-align: left;
+  font-size: 0.875rem;
+  font-weight: 400;
 `;
 
 const DropdownItem = styled.li`

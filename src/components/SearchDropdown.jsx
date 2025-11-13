@@ -6,6 +6,7 @@ const SearchDropdown = ({
   placeholder = "선택하세요",
   searchPlaceholder = "검색...",
   onSelect,
+  customStyle, // 추가 스타일을 받을 props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -42,7 +43,10 @@ const SearchDropdown = ({
 
   return (
     <DropdownWrapper ref={ref}>
-      <DropdownButton onClick={toggleDropdown}>
+      <DropdownButton 
+        onClick={toggleDropdown}
+        $customStyle={customStyle} // 커스텀 스타일 전달
+      >
         <span>{selected ? selected.label : placeholder}</span>
         <ArrowIcon $isOpen={isOpen}>
           <path
@@ -78,18 +82,20 @@ const SearchDropdown = ({
             </SearchIcon>
           </SearchBox>
 
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map((option) => (
-              <DropdownItem
-                key={option.value}
-                onClick={() => handleSelect(option)}
-              >
-                {option.label}
-              </DropdownItem>
-            ))
-          ) : (
-            <DropdownEmpty>검색 결과 없음</DropdownEmpty>
-          )}
+          <DropdownItemsContainer>
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <DropdownItem
+                  key={option.value}
+                  onClick={() => handleSelect(option)}
+                >
+                  {option.label}
+                </DropdownItem>
+              ))
+            ) : (
+              <DropdownEmpty>검색 결과 없음</DropdownEmpty>
+            )}
+          </DropdownItemsContainer>
         </DropdownList>
       )}
     </DropdownWrapper>
@@ -107,17 +113,33 @@ const DropdownWrapper = styled.div`
 const DropdownButton = styled.button`
   background: var(--white, #FFF);
   border: 1px solid var(--light-gray, #D9D9D9);
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   min-width: 35rem;
   height: 3rem;
   
+  padding: 0 1rem;
+
   text-align: left;
   color: var(--black, #000);
+  font-size: 1rem;
+  font-weight: 400;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &:hover {
+        cursor: pointer;
+        filter: brightness(0.9);
+  }
+
+  &:focus {
+      outline: 1px solid var(--blue, #115BCA);
+  }
+
+  /* 커스텀 스타일 적용 */
+  ${({ $customStyle }) => $customStyle && $customStyle}
 `;
 
 const ArrowIcon = styled.svg.attrs({
@@ -131,19 +153,45 @@ const ArrowIcon = styled.svg.attrs({
   transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "rotate(0deg)")};
 `;
 
-const DropdownList = styled.ul`
-  list-style: none;
-
+const DropdownList = styled.div`
   position: absolute;
+  top: 100%;
 
   background: var(--white, #FFF);
-  border: 1px solid var(--light-gray, #D9D9D9);
-  border-radius: 0.375rem;
+  border: 0.0625rem solid var(--light-gray, #D9D9D9); /* 1px = 0.0625rem */
+  border-radius: 0.5rem;
   width: 100%;
+  max-height: 18.75rem; /* 최대 높이 설정 300px = 18.75rem */
   z-index: 10;
-  overflow: hidden;
+  overflow: hidden; /* 전체 컨테이너는 overflow hidden */
   color: var(--black, #000);
   text-align: left;
+  font-size: 0.875rem;
+  font-weight: 400;
+`;
+
+const DropdownItemsContainer = styled.div`
+  max-height: 15rem; /* 검색창 높이(3.75rem) 제외한 높이 240px = 15rem */
+  overflow-y: auto; /* 아이템 컨테이너만 스크롤 */
+
+  /* 스크롤바 스타일 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
 `;
 
 const SearchBox = styled.div`
