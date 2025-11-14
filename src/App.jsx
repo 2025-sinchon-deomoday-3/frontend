@@ -4,10 +4,11 @@ import './App.css'
 import MainLayout from './layouts/MainLayout';
 import UploadLayout from './layouts/UploadLayout';
 import BackLayout from './layouts/BackLayout';
-//Login, Signup
+//Login, Signup, Profile
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import SignupCompletePage from "./pages/SignupCompletePage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
 
@@ -27,7 +28,7 @@ function App() {
 
           {/* BackTopbar(뒤로가기) */}
           <Route element={<BackLayout />}>
-            {/* <Route path="/profile" element={<ProfilePage/>} /> */}
+            <Route path="/profile" element={<ProfilePage/>} />
           </Route>
 
           {/* Topbar X */}
