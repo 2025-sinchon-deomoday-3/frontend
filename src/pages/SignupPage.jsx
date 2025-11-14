@@ -257,7 +257,7 @@ const SignupPage = () => {
   return(
     <Wrapper>
       <img src="/icons/Logo.svg" alt="로고" style={{width: "13.93656rem"}}/>
-      <h1>개인정보 입력</h1>
+      <h5>개인정보 입력</h5>
       <Container>
         <Input>
           <a>아이디</a>
@@ -357,7 +357,7 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
       </Container>
-      <h1>파견정보 입력</h1>
+      <h5>파견정보 입력</h5>
       <Container>
         <Input>
           <a>파견 국가</a>
@@ -457,12 +457,10 @@ const Wrapper = styled.div`
     margin-bottom: 3.85rem;
   }
 
-  h1{
+  h5{
     width: 37rem;
     margin-bottom: 3.85rem;
     text-align: left;
-    font-size: 1.5rem;
-    font-weight: 700;
     color: var(--deep-blue);
 
     margin-bottom: 1.25rem;
