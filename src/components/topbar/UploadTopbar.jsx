@@ -29,7 +29,7 @@ const Wrapper = styled.div`
     height: 5.5rem;
 
     position: fixed; 
-    /* top: 0; */
+    top: 0;
     left: 0;  
 
     display: flex;
