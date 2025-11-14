@@ -50,7 +50,7 @@ const StyledInput = styled.input`
   border-radius: 0.5rem;
   border: 1px solid var(--light-gray, #D9D9D9);
 
-  background: #FCFCFC;
+  background: var(--text-input);
   color: var(--black, #000);
 
   font-size: 1rem;
