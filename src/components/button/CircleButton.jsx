@@ -6,7 +6,7 @@ const CircleButton = forwardRef(({
   children,       // 버튼 안의 내용
   onClick,        // 클릭 시 실행할 함수
   disabled = false, // 비활성화 여부
-  style = {},       // 인라인 스타일 오버라이드
+  customStyle,       // 인라인 스타일 오버라이드
   onKeyDown, // 키보드 이벤트를 받을 props
 }, ref) => {
     const [isClickedIn, setIsClickedIn] = useState(false);
@@ -30,7 +30,7 @@ const CircleButton = forwardRef(({
         onClick={handleClick}
         $isClickedIn={isClickedIn}
         disabled={disabled}
-        style={style}
+        $customStyle={customStyle} // 커스텀 스타일 전달
         onKeyDown={handleKeyDown} // 내부 키보드 이벤트 처리
         ref={ref} // ref 전달
         tabIndex={0} // 키보드 포커스 허용
@@ -79,4 +79,7 @@ const StyledCircleButton = styled.button`
         cursor: not-allowed;
         color: var(--white)
     }
+
+    /* 커스텀 스타일 적용 */
+    ${({ $customStyle }) => $customStyle && $customStyle}
 `;
