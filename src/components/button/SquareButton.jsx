@@ -6,14 +6,14 @@ const Button = ({
   children,       // 버튼 안의 내용
   onClick,        // 클릭 시 실행할 함수
   disabled = false, // 비활성화 여부
-  style = {}       // 인라인 스타일 오버라이드
+  customStyle,      // 인라인 스타일 오버라이드
 }) => {
     
     return (
         <StyledButton
         onClick={onClick}
         disabled={disabled}
-        style={style}
+        $customStyle={customStyle} // 커스텀 스타일 전달
         >
           <h2>{children}</h2>
         </StyledButton>
@@ -51,4 +51,7 @@ const StyledButton = styled.button`
         background: var(--gray, #A5A5A5);
         cursor: not-allowed;
     }
+
+    /* 커스텀 스타일 적용 */
+    ${({ $customStyle }) => $customStyle && $customStyle}
 `;
