@@ -15,6 +15,8 @@ const rotation = keyframes`
     }
 
 `;
+
+// ------ 스타일링 영역 ------ 
 const SpinnerComponent = styled.img`
   width: 3rem;
   height: 3rem;
