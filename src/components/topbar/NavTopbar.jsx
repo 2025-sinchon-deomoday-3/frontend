@@ -69,6 +69,8 @@ const Button = styled.button`
     border: none;
     padding: 0;
 
+    transition: color 0.2s ease;
+
     color: ${({ $active }) => ($active ? 'var(--black)' : 'var(--gray)')};
 
     &:hover {
