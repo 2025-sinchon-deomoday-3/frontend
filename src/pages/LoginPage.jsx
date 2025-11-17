@@ -10,11 +10,10 @@ const onClick = () => {
 
 // 로그인 페이지용 인풋 스타일
 const loginInputStyle = {
-  width: "35rem",
-  height: "4.6875rem",
-  fontSize: "1.5rem",
-  padding: "1.44rem 2rem",
-  borderRadius: "0.9375rem"
+  width: "30.88rem",
+  height: "4.13506rem",
+  fontSize: "1.3125rem",
+  padding: "1.27rem 1.76rem",
 }
 
 // 에러 상태일 때의 추가 스타일
@@ -173,26 +172,28 @@ const LoginPage = () => {
 export default LoginPage;
 
 const Wrapper = styled.div`
+  width: 30.88rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 1.71rem;
 
   img{
-    margin-bottom: 4rem;
+    width: 19.50819rem;
+    height: 5.94913rem;
+    margin-bottom: 3.58rem;
   }
 `
 
 const PasswordWrapper = styled.div`
   position: relative;
-  width: 35rem;
-  margin-bottom: 1rem;
+  width: 100%;
 `
 
 const UsernameWrapper = styled.div`
   position: relative;
-  width: 35rem;
+  width: 100%;
 `
 
 const EyeIcon = styled.div`
@@ -218,14 +219,14 @@ const EyeIcon = styled.div`
 const Container = styled.div`
   width: 100%;
 
-  margin-top: 0.62rem;
+  
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   color: var(--black);
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 400;
 `
 
@@ -239,10 +240,10 @@ const StyledCheckbox = styled.input`
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  width: 2.125rem;
-  height: 2.125rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border: 1px solid var(--gray);
-  border-radius: 0.5rem;
+  border-radius: 0.3rem;
   cursor: pointer;
   background-color: white;
   position: relative;
@@ -258,8 +259,8 @@ const StyledCheckbox = styled.input`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 1.2rem;
-    height: 0.9rem;
+    width: 0.9rem;
+    height: 0.7rem;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='38' viewBox='0 0 52 38' fill='none'%3E%3Cpath d='M17.6282 29.25L45.8782 1C46.5449 0.333334 47.3227 0 48.2115 0C49.1004 0 49.8782 0.333334 50.5449 1C51.2115 1.66667 51.5449 2.45889 51.5449 3.37667C51.5449 4.29445 51.2115 5.08556 50.5449 5.75L19.9615 36.4167C19.2949 37.0833 18.5171 37.4167 17.6282 37.4167C16.7393 37.4167 15.9615 37.0833 15.2949 36.4167L0.961539 22.0833C0.294872 21.4167 -0.0251282 20.6256 0.00153846 19.71C0.0282051 18.7944 0.375982 18.0022 1.04487 17.3333C1.71376 16.6644 2.50598 16.3311 3.42154 16.3333C4.33709 16.3356 5.1282 16.6689 5.79487 17.3333L17.6282 29.25Z' fill='white'/%3E%3C/svg%3E");
     background-size: contain;
     background-repeat: no-repeat;
@@ -274,13 +275,13 @@ const StyledCheckbox = styled.input`
 
 const ErrorMessage = styled.div`
   color: var(--red);
-  font-size: 1rem;
-  min-height: 1.5rem;
+  font-size: 0.9rem;
+  min-height: 1rem;
   display: flex;
   align-items: left;
   position: absolute;
   top: 100%;
   left: 0;
-  padding-top: 0.25rem;
+  padding-top: 0.15rem;
   padding-left: 0.5rem;
 `

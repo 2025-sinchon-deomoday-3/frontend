@@ -14,8 +14,8 @@ const ScrapCircleButton = () => {
         onClick={onClick}
         $isScraped={isScraped}
         >
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="22" viewBox="-1 -1 19 24" fill="none">
-                <path d="M14.5 0H2.41667C1.0875 0 0 1.0875 0 2.41667V21.75L8.45833 18.125L16.9167 21.75V2.41667C16.9167 1.0875 15.8292 0 14.5 0Z" fill="white" stroke={isScraped? "#fff" : "var(--gray, #A5A5A5)"} strokeWidth="1"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="-1 -1 13 16" fill="none">
+                <path d="M9.72124 0H1.62021C0.729093 0 0 0.729093 0 1.62021V14.5819L5.67072 12.1515L11.3414 14.5819V1.62021C11.3414 0.729093 10.6124 0 9.72124 0Z" fill="var(--white, #fff)" stroke={isScraped? "var(--white, #fff)" : "var(--gray, #A5A5A5)"} strokeWidth="1"/>
             </svg>
             {count}
         </StyledScrapCircleButton>
@@ -30,8 +30,8 @@ const StyledScrapCircleButton = styled.button`
     align-items: center;
     gap: 0.62rem;
 
-    height: 3.25rem;
-    width: 9.0625rem;
+    height: 2.69rem;
+    width: 6.08rem;
 
     border-radius: 2.5rem;
 
@@ -44,8 +44,8 @@ const StyledScrapCircleButton = styled.button`
     color: ${({ $isScraped }) =>
     $isScraped ? "var(--white, #fff)" : "var(--black, #000)"};
 
-    font-size: 1.125rem;
-    font-weight: 500;
+    font-size: 0.92113rem;
+    font-weight: 700;
 
     &:hover {
         cursor: pointer;

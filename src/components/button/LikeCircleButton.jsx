@@ -14,8 +14,8 @@ const LikeCircleButton = () => {
         onClick={onClick}
         $isLiked={isLiked}
         >
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="-1 -1 27 24" fill="none">
-                <path d="M6.875 1.12456e-06C3.07812 1.12456e-06 0 3.1565 0 7.05005C0 14.1001 8.125 20.5092 12.5 22C16.875 20.5092 25 14.1001 25 7.05005C25 3.1565 21.9219 1.12456e-06 18.125 1.12456e-06C15.8 1.12456e-06 13.7437 1.18377 12.5 2.99563C11.8659 2.06976 11.0237 1.31414 10.0446 0.7927C9.06548 0.271264 7.97828 -0.000638125 6.875 1.12456e-06Z" fill="var(--white, #fff)" stroke={isLiked? "var(--white, #fff)" : "var(--gray, #A5A5A5)"} strokeWidth="1"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="-1 -1 18 16" fill="none">
+                <path d="M4.60921 7.35221e-07C2.06367 7.35221e-07 0 2.06367 0 4.60921C0 9.21842 5.44725 13.4086 8.38038 14.3832C11.3135 13.4086 16.7608 9.21842 16.7608 4.60921C16.7608 2.06367 14.6971 7.35221e-07 12.1515 7.35221e-07C10.5928 7.35221e-07 9.21423 0.773929 8.38038 1.9585C7.95528 1.35317 7.39063 0.85916 6.7342 0.518254C6.07777 0.177348 5.34888 -0.000417196 4.60921 7.35221e-07Z" fill="var(--white, #fff)" stroke={isLiked? "var(--white, #fff)" : "var(--gray, #A5A5A5)"} strokeWidth="1"/>
             </svg>
             {count}
         </StyledLikeCircleButton>
@@ -30,8 +30,8 @@ const StyledLikeCircleButton = styled.button`
     align-items: center;
     gap: 0.62rem;
 
-    height: 3.25rem;
-    width: 9.0625rem;
+    height: 2.69rem;
+    width: 6.08rem;
 
     border-radius: 2.5rem;
 
@@ -44,8 +44,8 @@ const StyledLikeCircleButton = styled.button`
     color: ${({ $isLiked }) =>
     $isLiked ? "var(--white, #fff)" : "var(--black, #000)"};
 
-    font-size: 1.125rem;
-    font-weight: 500;
+    font-size: 0.92113rem;
+    font-weight: 700;
 
     &:hover {
         cursor: pointer;

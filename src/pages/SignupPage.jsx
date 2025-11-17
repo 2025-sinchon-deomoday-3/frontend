@@ -9,9 +9,8 @@ import Dropdown from "../components/Dropdown";
 
 // 회원가입 페이지용 인풋 스타일
 const signupInputStyle = {
-  width: "35rem",
-  height: "3rem",
-  padding: "0.81rem 1rem",
+  width: "30.5rem",
+  padding: "0.54rem 0.71rem",
 }
 
 // 에러 상태일 때의 인풋필드 추가 스타일
@@ -22,7 +21,7 @@ const errorInputStyle = {
 
 // 회원가입 페이지용 드롭다운 스타일
 const signupDropStyle = {
-  width: "35rem"
+  width: "30.5rem",
 }
 
 // 에러 상태일 때의 드롭다운 추가 스타일
@@ -31,29 +30,26 @@ const errorDropStyle = {
   borderColor: "var(--red)"
 }
 
-// 회원가입 페이지용 버튼 스타일
+// 회원가입 페이지용 성별 버튼 스타일
 const signupButtonStyle = {
-  width: "16.875rem",
+  width: "15.25rem",
   height: "3rem",
   border: "1px solid var(--light-gray, #A5A5A5)",
   background: "var(--white, #fff)",
   color: "var(--black, #000)",
   fontSize: "1rem",
-  fontWeight: "400"
+  fontWeight: "400",
 }
 
-// 클릭된 상태의 버튼 스타일
+// 클릭된 상태의 성별 버튼 스타일
 const signupButtonClickedStyle = {
-  width: "16.875rem", 
-  height: "3rem",
+  ...signupButtonStyle,
   border: "none",
   background: "var(--blue, #115BCA)",
   color: "var(--white, #fff)",
-  fontSize: "1rem",
-  fontWeight: "400"
 }
 
-// 에러 상태일 때의 버튼 추가 스타일
+// 에러 상태일 때의 성별 버튼 추가 스타일
 const errorButtonStyle = {
   ...signupButtonStyle,
   borderColor: "var(--red)"
@@ -257,10 +253,10 @@ const SignupPage = () => {
   return(
     <Wrapper>
       <img src="/icons/Logo.svg" alt="로고" style={{width: "13.93656rem"}}/>
-      <h5>개인정보 입력</h5>
+      <h2 className="title">개인정보 입력</h2>
       <Container>
         <Input>
-          <a>아이디</a>
+          <h3>아이디</h3>
           <Inputfield
             ref={inputRefs[0]}
             placeholder="아이디"
@@ -274,7 +270,7 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>비밀번호</a>
+          <h3>비밀번호</h3>
           <Inputfield
             ref={inputRefs[1]}
             type="password"
@@ -289,7 +285,7 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>비밀번호 확인</a>
+          <h3>비밀번호 확인</h3>
           <Inputfield
             ref={inputRefs[2]}
             type="password"
@@ -304,7 +300,7 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>닉네임</a>
+          <h3>닉네임</h3>
           <Inputfield
             ref={inputRefs[3]}
             placeholder="닉네임 (최대 10자)"
@@ -318,12 +314,12 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>성별</a>
+          <h3>성별</h3>
           <ButtonContainer>
             <CircleButton 
               ref={inputRefs[4]}
               onClick={() => handleGenderSelect("남성")}
-              style={gender === "남성" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
+              customStyle={gender === "남성" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
               onKeyDown={(e) => handleKeyDown(e, 4)}
             >
               남성
@@ -331,7 +327,7 @@ const SignupPage = () => {
             <CircleButton 
               ref={inputRefs[5]}
               onClick={() => handleGenderSelect("여성")}
-              style={gender === "여성" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
+              customStyle={gender === "여성" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
               onKeyDown={(e) => handleKeyDown(e, 5)}
             >
               여성
@@ -342,14 +338,14 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>본교</a>
+          <h3>본교</h3>
           <SearchDropdown
             ref={inputRefs[6]}
             options={univList}
             placeholder="본교 선택"
             searchPlaceholder="학교를 검색하세요"
             onSelect={handleUnivSelect}
-            customStyle={univError ? errorDropStyle : null}
+            customStyle={univError ? errorDropStyle : signupDropStyle}
             onKeyDown={(e) => handleKeyDown(e, 6)}
           />
           <ErrorMessage>
@@ -357,17 +353,17 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
       </Container>
-      <h5>파견정보 입력</h5>
+      <h2 className="title">파견정보 입력</h2>
       <Container>
         <Input>
-          <a>파견 국가</a>
+          <h3>파견 국가</h3>
           <SearchDropdown
             ref={inputRefs[7]}
             options={univList}
             placeholder="파견 국가 선택"
             searchPlaceholder="파견 국가를 검색하세요"
             onSelect={handleCountrySelect}
-            customStyle={countryError ? errorDropStyle : null}
+            customStyle={countryError ? errorDropStyle : signupDropStyle}
             onKeyDown={(e) => handleKeyDown(e, 7)}
           />
           <ErrorMessage>
@@ -375,14 +371,14 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>파견 학교</a>
+          <h3>파견 학교</h3>
           <SearchDropdown
             ref={inputRefs[8]}
             options={univList}
             placeholder="파견 학교 선택"
             searchPlaceholder="파견 학교를 검색하세요"
             onSelect={handleExUnivSelect}
-            customStyle={exUnivError ? errorDropStyle : null}
+            customStyle={exUnivError ? errorDropStyle : signupDropStyle}
             onKeyDown={(e) => handleKeyDown(e, 8)}
           />
           <ErrorMessage>
@@ -390,7 +386,7 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>파견 유형</a>
+          <h3>파견 유형</h3>
           <Dropdown
             ref={inputRefs[9]}
             options={typeList}
@@ -404,7 +400,7 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>파견 시기</a>
+          <h3>파견 시기</h3>
           <Inputfield
             ref={inputRefs[10]}
             placeholder="예: 2024년 2학기"
@@ -418,7 +414,7 @@ const SignupPage = () => {
           </ErrorMessage>
         </Input>
         <Input>
-          <a>파견 기간</a>
+          <h3>파견 기간</h3>
           <Inputfield
             ref={inputRefs[11]}
             placeholder="예: 3개월"
@@ -435,7 +431,6 @@ const SignupPage = () => {
       <SquareButton
         ref={inputRefs[12]}
         onClick={handleSignup}
-        style={{marginTop: "0.75rem"}}
       >
         회원가입
       </SquareButton>
@@ -446,6 +441,8 @@ const SignupPage = () => {
 export default SignupPage;
 
 const Wrapper = styled.div`
+  width: 30.88rem;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -453,29 +450,30 @@ const Wrapper = styled.div`
   margin-bottom: 5rem;
 
   img{
-    margin-top: 4.12rem;
+    margin-top: 2rem;
     margin-bottom: 3.85rem;
   }
 
-  h5{
-    width: 37rem;
+  h2.title {
+    width: 100%;
     margin-bottom: 3.85rem;
     text-align: left;
     color: var(--deep-blue);
 
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
   }
 `
 
 const Container = styled.div`
-  width: 35rem;
+  width: 30.88rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.88rem;
-  
-  margin-bottom: 3.44rem;
+  gap: 1.5rem;
+
+  margin-left: 0.19rem;  
+  margin-bottom: 3.5rem;
 `
 
 const Input = styled.div`
@@ -484,29 +482,27 @@ const Input = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   
-  a{
+  h3{
     width: 100%;
     text-align: left;
-    color: var(--black);
-    font-size: 1.25rem;
-    font-weight: 400;
+    font-weight: var(--fw-md);
 
-    margin-bottom: 0.38rem;
+    margin-bottom: 0.27rem;
   }
 `
 
 const ErrorMessage = styled.div`
   color: var(--red);
   font-size: 0.9rem;
-  min-height: 1.5rem;
+  min-height: 1rem;
   display: flex;
   align-items: left;
   position: absolute;
   top: 100%;
   left: 0;
-  padding-top: 0.25rem;
+  padding-top: 0.15rem;
   padding-left: 0.5rem;
 `
 
