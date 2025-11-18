@@ -4,6 +4,8 @@ import './App.css'
 import MainLayout from './layouts/MainLayout';
 import UploadLayout from './layouts/UploadLayout';
 import BackLayout from './layouts/BackLayout';
+//Home
+import HomePage from "./pages/HomePage";
 //Login, Signup, Profile
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -18,7 +20,8 @@ function App() {
         <Routes>
           {/* NavTopbar(네비게이션) */}
           <Route element={<MainLayout />}>
-            {/* <Route path="/home" element={<HomePage />} /> */}
+            <Route path="/" element={<Navigate to="/home" replace />} /> {/* 기본 경로를 /home으로 리다이렉트 */}
+            <Route path="/home" element={<HomePage />} />
           </Route>
 
           {/* UploadTopbar(뒤로가기+게시하기) */}
