@@ -208,7 +208,7 @@ const Feeding = styled.div`
 
 const Right = styled.div`
   width: 100%;
-  height: calc(100vh - 5.5rem - 1.25rem); /* 뷰포트 높이 - topbar(5.5rem) - padding-top(2rem) */
+  height: calc(100vh - 5.5rem - 1.25rem); /* 뷰포트 높이 - topbar(5.5rem) - padding-top(1.25rem) */
   max-height: calc(100vh - 5.5rem - 1.25rem);
   overflow: hidden; /* 스크롤 방지 */
 
