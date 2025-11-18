@@ -68,7 +68,6 @@ const ProfilePage = () => {
                 <img
                   src={flagSrc}
                   alt={userInfo[0]}
-                  onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/flags/default.png'; }}
                 />
             </Flag>
             <TextContainer>

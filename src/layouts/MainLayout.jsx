@@ -22,7 +22,7 @@ const LayoutWrapper = styled.div`
 `
 
 const Content = styled.main`
-  padding-top: calc(5.5rem + 2rem); /* NavTopbar 높이 + 여백 */
+  padding-top: calc(5.5rem + 1.25rem); /* NavTopbar 높이 + 여백 */
   min-height: calc(100vh - 5.5rem);
   
   display: flex;

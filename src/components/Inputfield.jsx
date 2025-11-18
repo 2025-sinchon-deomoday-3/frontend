@@ -7,6 +7,7 @@ const Inputfield = forwardRef(({
   value,// 현재 입력된 값
   onChange,// 값 변경하면 실행될 것!
   customStyle, // 추가 스타일을 받을 props
+  placeholderStyle, // placeholder 스타일을 받을 props
   onKeyDown, // 키보드 이벤트를 받을 props
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -29,6 +30,7 @@ const Inputfield = forwardRef(({
         $isFocused={isFocused} // 포커스 상태 전달 styled-components에 전달
 
         $customStyle={customStyle} // 커스텀 스타일 전달
+        $placeholderStyle={placeholderStyle} // placeholder 스타일 전달
       />
     </InputWrapper>
   );
@@ -37,6 +39,7 @@ const Inputfield = forwardRef(({
 export default Inputfield;
 
 const InputWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -61,6 +64,7 @@ const StyledInput = styled.input`
 
   &::placeholder {
     color: var(--gray, #a5a5a5);
+    ${({ $placeholderStyle }) => $placeholderStyle && $placeholderStyle}
   }
 
   &:hover {
