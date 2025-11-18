@@ -1,8 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "../components/Spinner";
 
 const AcctSummaryLoading = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const createSnapshot = async () => {
+      try {
+        const profileData = location.state?.profileData;
+
+        if (!profileData) {
+          // 데이터 없으면? 이전 페이지로
+          navigate(-1);
+          return;
+        }
+
+        const token = localStorage.getItem("accessToken"); // 또는 세션/쿠키에서 가져오기
+
+        const response = await fetch("/summaries/snapshot/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(profileData),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // 성공 시 요약본 페이지로 이동
+          navigate("/summary", {
+            state: {
+              snapshotId: data.data.snapshot_id,
+              detailProfileId: data.data.detail_profile_id,
+            },
+          });
+        } else {
+          setError(data.message || "요약본 생성에 실패했습니다.");
+        }
+      } catch (err) {
+        setError("네트워크 오류가 발생했습니다.");
+        console.error("Snapshot creation error:", err);
+      }
+    };
+
+    createSnapshot();
+  }, [navigate, location]);
+
+  if (error) {
+    return (
+      <Wrapper>
+        <ContentContainer>
+          <ErrorText>{error}</ErrorText>
+        </ContentContainer>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <ContentContainer>
@@ -63,4 +122,11 @@ const SubText = styled.h3`
   line-height: 1.6875rem;
   text-align: center;
   white-space: pre-wrap;
+`;
+
+const ErrorText = styled.p`
+  color: var(--red, #ca1111);
+  font-size: 1.125rem;
+  font-weight: 500;
+  text-align: center;
 `;
