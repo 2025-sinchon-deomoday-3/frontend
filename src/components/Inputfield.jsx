@@ -16,34 +16,25 @@ const Inputfield = forwardRef(({
   const handleBlur = () => setIsFocused(false);
 
   return (
-    <InputWrapper>
-      <StyledInput
-        type={type} 
-        placeholder={placeholder} 
-        value={value} 
-        onChange={onChange} 
+    <StyledInput
+      type={type} 
+      placeholder={placeholder} 
+      value={value} 
+      onChange={onChange} 
 
-        onFocus={handleFocus} // input 클릭(포커스) 시 실행
-        onBlur={handleBlur} // input 벗어날 때(포커스 해제) 실행
-        onKeyDown={onKeyDown} // 키보드 이벤트 처리
-        ref={ref} // ref 전달
-        $isFocused={isFocused} // 포커스 상태 전달 styled-components에 전달
+      onFocus={handleFocus} // input 클릭(포커스) 시 실행
+      onBlur={handleBlur} // input 벗어날 때(포커스 해제) 실행
+      onKeyDown={onKeyDown} // 키보드 이벤트 처리
+      ref={ref} // ref 전달
+      $isFocused={isFocused} // 포커스 상태 전달 styled-components에 전달
 
-        $customStyle={customStyle} // 커스텀 스타일 전달
-        $placeholderStyle={placeholderStyle} // placeholder 스타일 전달
-      />
-    </InputWrapper>
+      $customStyle={customStyle} // 커스텀 스타일 전달
+      $placeholderStyle={placeholderStyle} // placeholder 스타일 전달
+    />
   );
 });
 
 export default Inputfield;
-
-const InputWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
 
 const StyledInput = styled.input`
   width: 100%;
