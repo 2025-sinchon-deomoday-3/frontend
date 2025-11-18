@@ -11,6 +11,8 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import SignupCompletePage from "./pages/SignupCompletePage";
 import ProfilePage from "./pages/ProfilePage";
+//Scrapbook
+import ScrapbookPage from "./pages/ScrapbookPage";
 
 function App() {
 
@@ -22,6 +24,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<Navigate to="/home" replace />} /> {/* 기본 경로를 /home으로 리다이렉트 */}
             <Route path="/home" element={<HomePage />} />
+            <Route path="/scrapbook" element={<ScrapbookPage />} />
           </Route>
 
           {/* UploadTopbar(뒤로가기+게시하기) */}
