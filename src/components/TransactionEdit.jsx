@@ -5,11 +5,12 @@ import CircleButton from "./button/CircleButton";
 import SquareButton from "./button/SquareButton";
 
 const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
-  // 지출ㅐㄱ수입 ?
+  // 지출/수입 타입
   const [entryType, setEntryType] = useState(
     initialData?.entry_type || "EXPENSE"
   );
 
+  // 폼 데이터
   const [formData, setFormData] = useState({
     date: initialData?.date || new Date().toISOString().split("T")[0],
     payment_method: initialData?.payment_method || "CARD",
@@ -18,6 +19,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
     currency_code: initialData?.currency_code || "USD",
   });
 
+  // 카테고리 옵션
   const categoryOptions = [
     { value: "FOOD", label: "식비" },
     { value: "HOUSING", label: "주거비" },
@@ -29,6 +31,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
     { value: "ETC", label: "기타" },
   ];
 
+  // 결제수단 옵션 (지출일 때만)
   const paymentMethodOptions = [
     { value: "CARD", label: "카드" },
     { value: "CASH", label: "현금" },
@@ -92,17 +95,18 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
             border: ${
               entryType === "EXPENSE" ? "none" : "1px solid var(--light-gray)"
             };
-            padding: 0.70313rem 1.40625rem;
-            gap: 0.46875rem;
+            padding: 0.5rem 1.40625rem;
+            gap: 0.5rem;
             font-size: 0.84375rem;
             width: 6.79688rem;
             height: 2.48438rem;
           `}
         >
-          <IconCircle $active={entryType === "EXPENSE"}>−</IconCircle>
-          <span>지출</span>
+          <ButtonWrapper>
+            <IconCircle $active={entryType === "EXPENSE"}>−</IconCircle>
+            <span>지출</span>
+          </ButtonWrapper>
         </CircleButton>
-
         <CircleButton
           onClick={() => setEntryType("INCOME")}
           customStyle={`
@@ -113,20 +117,23 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
             border: ${
               entryType === "INCOME" ? "none" : "1px solid var(--light-gray)"
             };
-            padding: 0.70313rem 1.40625rem;
-            gap: 0.46875rem;
+            padding: 0.70313rem 1.7rem;
+            gap: 0.5rem;
             font-size: 0.84375rem;
             width: 6.79688rem;
             height: 2.48438rem;
           `}
         >
-          <IconCircle $active={entryType === "INCOME"}>+</IconCircle>
-          <span>수입</span>
+          <ButtonWrapper>
+            <IconCircle $active={entryType === "INCOME"}>+</IconCircle>
+            <span>수입</span>
+          </ButtonWrapper>
         </CircleButton>
       </ToggleContainer>
 
+      {/* 입력 폼 */}
       <FormContainer>
-        {/* 1. 발생일 + 결제수단 */}
+        {/* 1행: 발생일 + 결제수단 */}
         <FormRow>
           <FormGroup style={{ flex: 1 }}>
             <LabelRow>
@@ -159,7 +166,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
                   handleInputChange("payment_method", option.value)
                 }
                 customStyle={`
-                  width: 100%;
+                min-width: 100%;
                   height: 2.53125rem;
                   font-size: 0.84375rem;
                   text-align: center;
@@ -169,7 +176,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
           )}
         </FormRow>
 
-        {/* 2행. 카테고리 + 금액 + 화폐단위 */}
+        {/* 2행: 카테고리 + 금액 + 화폐단위 */}
         <FormRow>
           <FormGroup style={{ flex: 1 }}>
             <LabelRow>
@@ -180,7 +187,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
               placeholder={categoryOptions[0].label}
               onSelect={(option) => handleInputChange("category", option.value)}
               customStyle={`
-                width: 100%;
+                min-width: fit-content;
                 height: 2.53125rem;
                 font-size: 0.84375rem;
                 color: var(--blue);
@@ -210,7 +217,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
                 handleInputChange("currency_code", option.value)
               }
               customStyle={`
-                width: 100%;
+                min-width: fit-content;
                 height: 2.53125rem;
                 font-size: 0.84375rem;
                 text-align: center;
@@ -220,7 +227,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
         </FormRow>
       </FormContainer>
 
-      {/* 모달일 때만? 버튼 표시 */}
+      {/* 모달일 때만 버튼 표시 */}
       {initialData && (
         <ButtonContainer>
           <SquareButton
@@ -260,7 +267,7 @@ const TransactionEdit = ({ initialData = null, onSave, onDelete, onClose }) => {
 export default TransactionEdit;
 
 //
-// ————————————————————— 여기부턴 스타일링 —————————————————————
+// ————————————————————— 스타일링 —————————————————————
 
 const Container = styled.div`
   width: 100%;
@@ -277,20 +284,22 @@ const ToggleContainer = styled.div`
   gap: 0.75rem;
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+`;
+
 const IconCircle = styled.div`
   width: 1.23rem;
   height: 1.23rem;
-  border-radius: 50%;
-  background: ${({ $active }) =>
-    $active ? "var(--white)" : "var(--light-gray)"};
-
+  background: none;
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 1.2rem;
   font-weight: 700;
-  color: ${({ $active }) => ($active ? "var(--blue)" : "var(--gray)")};
+  color: ${({ $active }) => ($active ? "var(--white)" : "var(--gray)")};
 `;
 
 const FormContainer = styled.div`
@@ -316,12 +325,13 @@ const Label = styled.label`
   color: var(--black);
   font-size: 0.8rem;
   font-weight: 400;
+  min-width: fit-content;
 `;
 
 const LabelRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 0.5rem;
 `;
 
@@ -375,7 +385,7 @@ const CalendarIcon = styled.img`
 `;
 
 const AmountInput = styled.input`
-  width: 100%;
+  min-width: fit-content;
   height: 2.53125rem;
   padding: 0 1.125rem;
 
@@ -401,6 +411,7 @@ const AmountInput = styled.input`
     }
   }
 
+  /* 숫자 입력 화살표 제거 */
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
