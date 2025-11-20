@@ -6,9 +6,16 @@ const Dropdown = ({
   placeholder = "선택하세요", 
   onSelect,
   customStyle, // 추가 스타일을 받을 props
+  defaultValue, // 기본 선택값
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(() => {
+    // defaultValue가 있으면 해당 옵션을 찾아서 초기값으로 설정
+    if (defaultValue) {
+      return options.find(option => option.value === defaultValue) || null;
+    }
+    return null;
+  });
   const ref = useRef(null);
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
@@ -16,7 +23,7 @@ const Dropdown = ({
   const handleSelect = (option) => {
     setSelected(option);
     setIsOpen(false);
-    if (onSelect) onSelect(option);
+    if (onSelect) onSelect(option.value);
   };
 
   // 외부 클릭 시 닫기
