@@ -28,6 +28,8 @@ const StyledLoginCircleButton = styled.button`
     height: 3.25rem;
     width: 6.5625rem;
 
+    white-space: nowrap;
+
     border-radius: 2.5rem;
 
     border: ${({ $isLoggedIn }) =>

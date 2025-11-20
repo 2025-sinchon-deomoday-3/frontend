@@ -30,6 +30,8 @@ const StyledButton = styled.button`
     height: 3.86rem;
     width: 30.88rem;
 
+    white-space: nowrap;
+
     border-radius: 0.827rem;
     background: var(--blue, #115BCA);
 

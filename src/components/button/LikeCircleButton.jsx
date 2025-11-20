@@ -33,6 +33,8 @@ const StyledLikeCircleButton = styled.button`
     height: 2.69rem;
     width: 6.08rem;
 
+    white-space: nowrap;
+
     border-radius: 2.5rem;
 
     border: ${({ $isLiked }) =>

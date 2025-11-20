@@ -35,6 +35,8 @@ const StyledScrapCircleButton = styled.button`
 
     border-radius: 2.5rem;
 
+    white-space: nowrap;
+
     border: ${({ $isScraped }) =>
     $isScraped ? "none" : "1px solid var(--gray, #A5A5A5)"};
 
