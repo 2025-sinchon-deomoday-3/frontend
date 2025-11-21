@@ -23,10 +23,9 @@ import ScrapbookPage from "./pages/ScrapbookPage";
 import AccountbookPage from "./pages/AccountbookPage";
 //AcctSummary
 import AcctSummaryLoading from "./pages/AcctSummaryLoading";
-import AcctSummaryProfileData from "./pages/AcctSummaryProfileData";
-import AcctSummaryComplete from "./pages/AcctSummaryComplete";
-import AcctSummaryPage from "./pages/AcctSummaryPage";
-import TestPage from "./pages/Test/test";
+// import AcctSummaryProfileData from "./pages/AcctSummaryProfileData";
+// import AcctSummaryComplete from "./pages/AcctSummaryComplete";
+// import AcctSummaryPage from "./pages/AcctSummaryPage";
 
 function App() {
   return (
@@ -48,19 +47,18 @@ function App() {
 
           {/* BackTopbar(뒤로가기) */}
           <Route element={<BackLayout />}>
-            <Route path="/profile" element={<ProfilePage />} />
+            {/* <Route path="/profile" element={<ProfilePage />} /> */}
           </Route>
 
           {/* Topbar X */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/test" element={<TestPage />} />
 
           {/* 가계부 요약본 */}
-          <Route path="/summaries/loading" element={<AcctSummaryLoading />} />
+          {/* <Route path="/summaries/loading" element={<AcctSummaryLoading />} />
           <Route path="/summaries/profile" element={<AcctSummaryProfileData/>}/>
           <Route path="/summaries/complete" element={<AcctSummaryComplete />} />
-          <Route path="/summaries/snapshot" element={<AcctSummaryPage />} />
+          <Route path="/summaries/snapshot" element={<AcctSummaryPage />} />*/}
         </Routes>
       </Router>
     </>
