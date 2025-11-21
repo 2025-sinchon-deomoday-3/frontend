@@ -331,6 +331,7 @@ const CardHeader = styled.div`
   align-items: center;
   gap: 0.1rem;
   margin-bottom: 0.7rem;
+  white-space: nowrap;
 `;
 
 const IconWrapper = styled.div`
