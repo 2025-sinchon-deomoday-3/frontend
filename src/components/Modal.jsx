@@ -10,6 +10,9 @@ const Modal = ({
   actionText = "확인", // action(?) 버튼 텍스트
   cancelText = "취소", // Cancel 버튼 텍스트
   showCancelButton = true, // Cancel 버튼 표시 O/X
+  showImage = true, // 이미지 표시 O/X
+  customContentStyle = "", // content 커스텀 스타일
+  customSubtextStyle = "", // subtext 커스텀 스타일
   onAction,
   onCancel,
   onClose,
@@ -41,23 +44,29 @@ const Modal = ({
     <ModalBackdrop>
       <ModalContainer>
         <ModalContentWrapper>
-          <StyledModalImage src={ModalAlertImage} alt="알림" />
-          <ModalContent>{content}</ModalContent>
-          {subtext && <Modalsubtext>{subtext}</Modalsubtext>}
+          {showImage && <StyledModalImage src={ModalAlertImage} alt="알림" />}
+          <ModalContent customStyle={customContentStyle}>
+            {content}
+          </ModalContent>
+          {subtext && (
+            <Modalsubtext customStyle={customSubtextStyle}>
+              {subtext}
+            </Modalsubtext>
+          )}
         </ModalContentWrapper>
 
         <ButtonContainer>
           {showCancelButton && (
-            <Button 
-            onClick={handleCancel} style={{ height: "2.5rem", background: "var(--sub-btn, #fcfcfc)" }}>
+            <Button
+              onClick={handleCancel}
+              customStyle={`background: var(--light-gray, #f4f4f4); max-height: fit-content; padding : 0 0 0.6rem 0;`}
+            >
               <SCanceltext>{cancelText}</SCanceltext>
             </Button>
           )}
           <Button
             onClick={handleAction}
-            style={{
-              height: "2.5rem",
-            }}
+            customStyle={` max-height: fit-content; padding : 0 0 0.6rem 0;`}
           >
             <SActiontext>{actionText}</SActiontext>
           </Button>
@@ -91,7 +100,7 @@ const ModalContainer = styled.div`
   box-shadow: 0 12px 30px -6px rgba(88, 92, 95, 0.16);
   padding: 2rem 1.125rem 1rem 1.125rem;
   width: 21.32rem;
-  min-height: 11.16rem;
+  min-height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -117,15 +126,17 @@ const Modalsubtext = styled.p.attrs({
 })`
   color: var(--gray, #a5a5a5); // 색상은 다르길래 따로 지정
   text-align: center;
+  ${({ $customStyle }) => $customStyle && $customStyle}
 `;
 
 const ModalContent = styled.p`
   color: var(--black, #000);
   font-family: var(--body-font-family);
   font-size: 1.25rem;
-  font-weight: 400;
+  font-weight: 500;
   text-align: center;
   white-space: pre-wrap;
+  ${({ $customStyle }) => $customStyle && $customStyle}
 `;
 
 //
@@ -137,7 +148,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.351rem;
+  gap: 0.5rem;
 `;
 
 const SActiontext = styled.span.attrs({
