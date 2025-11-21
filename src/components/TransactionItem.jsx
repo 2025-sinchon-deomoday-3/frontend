@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+// 카테고리별 아이콘 매핑
 const CategoryIcon = ({ category }) => {
   const icons = {
     FOOD: (
@@ -19,9 +20,9 @@ const CategoryIcon = ({ category }) => {
     ),
     HOUSING: (
       <svg
-        width="18"
-        height="18"
-        viewBox="0 0 18 18"
+        width="15"
+        height="15"
+        viewBox="0 0 25 25"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -35,7 +36,7 @@ const CategoryIcon = ({ category }) => {
       <svg
         width="18"
         height="18"
-        viewBox="0 0 18 18"
+        viewBox="0 0 25 25"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -61,9 +62,9 @@ const CategoryIcon = ({ category }) => {
     ),
     TRAVEL: (
       <svg
-        width="18"
-        height="18"
-        viewBox="0 0 18 18"
+        width="13"
+        height="13"
+        viewBox="0 0 28 28"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -77,7 +78,7 @@ const CategoryIcon = ({ category }) => {
       <svg
         width="18"
         height="18"
-        viewBox="0 0 18 18"
+        viewBox="0 0 17 17"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -92,7 +93,7 @@ const CategoryIcon = ({ category }) => {
         xmlns="http://www.w3.org/2000/svg"
         width="21"
         height="21"
-        viewBox="0 0 21 21"
+        viewBox="0 0 27 27"
         fill="none"
       >
         <g clip-path="url(#clip0_1639_207)">
@@ -107,7 +108,7 @@ const CategoryIcon = ({ category }) => {
         </g>
         <defs>
           <clipPath id="clip0_1639_207">
-            <rect width="20.1814" height="20.1814" fill="white" />
+            <rect width="25" height="25" fill="white" />
           </clipPath>
         </defs>
       </svg>
@@ -147,6 +148,7 @@ const TransactionItem = ({ transaction, onClick }) => {
     ETC: "기타",
   };
 
+  // 금액 포맷팅 (천단위 콤마)
   const formatAmount = (amount) => {
     return parseFloat(amount).toLocaleString("en-US", {
       minimumFractionDigits: 0,
@@ -154,6 +156,7 @@ const TransactionItem = ({ transaction, onClick }) => {
     });
   };
 
+  // 화폐 기호 매핑
   const getCurrencySymbol = (code) => {
     const symbols = {
       USD: "$",
@@ -172,10 +175,12 @@ const TransactionItem = ({ transaction, onClick }) => {
   const categoryLabel =
     categoryLabels[transaction.category] || transaction.category;
 
+  // 주 금액 (입력한 화폐)
   const primaryAmount = `${isExpense ? "-" : "+"} ${getCurrencySymbol(
     transaction.currency_code
   )}${formatAmount(transaction.amount)}`;
 
+  // 부 금액 (환산된 화폐)
   const secondaryAmount = `${getCurrencySymbol(
     transaction.converted_currency_code
   )}${formatAmount(transaction.amount_converted)}`;
@@ -234,7 +239,7 @@ const CategoryInfo = styled.div`
 const IconWrapper = styled.div`
   width: 1.3rem;
   height: 1.3rem;
-  margin-top: 0.25rem;
+  margin-top: 0.4rem;
   margin-left: 0.5rem;
 
   display: flex;
