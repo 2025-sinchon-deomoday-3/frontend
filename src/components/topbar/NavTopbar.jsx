@@ -12,7 +12,29 @@ const NavTopbar = () =>{
     const budgetActive        = !!useMatch('/budget/*'); 
     const accountbookActive   = !!useMatch('/accountbook/*');
     const scrapbookActive     = !!useMatch('/scrapbook/*');
-    const isLoggedIn = !!localStorage.getItem("token");
+    const [isLoggedIn, setIsLoggedIn] = React.useState(() => !!localStorage.getItem("token"));
+
+    // 로그인/로그아웃 상태 변화 감지하여 isLoggedIn 갱신
+    const location = useLocation();
+    React.useEffect(() => {
+        const handleStorageChange = () => {
+            const loggedIn = !!localStorage.getItem("token");
+            setIsLoggedIn(loggedIn);
+            // 로그아웃 시 예산안, 가계부, 스크랩북 페이지일 때만 모달 띄우기
+            const isBudget = location.pathname.startsWith("/budget");
+            const isAccountbook = location.pathname.startsWith("/accountbook");
+            const isScrapbook = location.pathname.startsWith("/scrapbook");
+            if (
+                !loggedIn && (isBudget || isAccountbook || isScrapbook)
+            ) {
+                setShowModal(true);
+            }
+        };
+        window.addEventListener("storage", handleStorageChange);
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        };
+    }, [location]);
 
     // 버튼 클릭 핸들러: 로그인 안했으면 모달, 했으면 이동
     const handleNavClick = (route) => {
@@ -37,7 +59,7 @@ const NavTopbar = () =>{
                 <img src="/icons/Logo.svg" alt="로고" style={{width: "9rem"}}/>
 
                 <NavContainer>
-                    <Button onClick={() => handleNavClick('/home')} $active={homeActive}>
+                    <Button onClick={() => navigate('/home')} $active={homeActive}>
                         홈
                     </Button>
                     <Button onClick={() => handleNavClick('/budget')} $active={budgetActive}>
