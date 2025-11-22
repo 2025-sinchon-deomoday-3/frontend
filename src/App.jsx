@@ -24,7 +24,7 @@ import AccountbookPage from "./pages/AccountbookPage";
 //AcctSummary
 import AcctSummaryLoading from "./pages/AcctSummaryLoading";
 import AcctSummaryComplete from "./pages/AcctSummaryComplete";
-// import AcctSummaryProfileData from "./pages/AcctSummaryProfileData";
+import AcctSummaryProfileData from "./pages/AcctSummaryProfileData";
 // import AcctSummaryPage from "./pages/AcctSummaryPage";
 
 function App() {
@@ -47,7 +47,10 @@ function App() {
 
           {/* BackTopbar(뒤로가기) */}
           <Route element={<BackLayout />}>
-            {/* <Route path="/profile" element={<ProfilePage />} /> */}
+            <Route
+              path="/summaries/profile"
+              element={<AcctSummaryProfileData />}
+            />
           </Route>
 
           {/* Topbar X */}
@@ -57,8 +60,7 @@ function App() {
           {/* 가계부 요약본 */}
           <Route path="/summaries/loading" element={<AcctSummaryLoading />} />
           <Route path="/summaries/complete" element={<AcctSummaryComplete />} />
-          {/* <Route path="/summaries/snapshot" element={<AcctSummaryPage />} />
-              <Route path="/summaries/profile" element={<AcctSummaryProfileData/>}/>*/}
+          {/* <Route path="/summaries/snapshot" element={<AcctSummaryPage />} />*/}
         </Routes>
       </Router>
     </>
