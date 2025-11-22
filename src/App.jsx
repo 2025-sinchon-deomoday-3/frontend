@@ -16,9 +16,12 @@ import HomePage from "./pages/HomePage";
 //Login, Signup, Profile
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import SignupCompletePage from "./pages/SignupCompletePage";
 import ProfilePage from "./pages/ProfilePage";
 //Scrapbook
 import ScrapbookPage from "./pages/ScrapbookPage";
+//Budget
+import BudgetPage from "./pages/BudgetPage";
 //Accountbook
 import AccountbookPage from "./pages/AccountbookPage";
 //AcctSummary
@@ -34,15 +37,16 @@ function App() {
         <Routes>
           {/* NavTopbar(네비게이션) */}
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Navigate to="/home" replace />} />{" "}
-            {/* 기본 경로를 /home으로 리다이렉트 */}
+            <Route path="/" element={<Navigate to="/home" replace />} /> {/* 기본 경로를 /home으로 리다이렉트 */}
             <Route path="/home" element={<HomePage />} />
             <Route path="/scrapbook" element={<ScrapbookPage />} />
+            <Route path="/budget" element={<BudgetPage />} />
           </Route>
 
           {/* UploadTopbar(뒤로가기+게시하기) */}
           <Route element={<UploadLayout />}>
             <Route path="/accountbook" element={<AccountbookPage />} />
+            <Route path="/profile" element={<ProfilePage/>} />
           </Route>
 
           {/* BackTopbar(뒤로가기) */}
@@ -56,6 +60,7 @@ function App() {
           {/* Topbar X */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/signup/complete" element={<SignupCompletePage/>}/>
 
           {/* 가계부 요약본 */}
           <Route path="/summaries/loading" element={<AcctSummaryLoading />} />
