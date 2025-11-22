@@ -50,13 +50,13 @@ function App() {
 
           {/* BackTopbar(뒤로가기) */}
           <Route element={<BackLayout />}>
+            <Route path="/signup" element={<SignupPage />} />
             <Route path="/profile" element={<ProfilePage/>} />
             <Route path="/summaries/profile" element={<AcctSummaryProfileData />} />
           </Route>
 
           {/* Topbar X */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
           <Route path="/signup/complete" element={<SignupCompletePage/>}/>
 
           {/* 가계부 요약본 */}

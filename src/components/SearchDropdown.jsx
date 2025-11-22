@@ -7,16 +7,23 @@ const SearchDropdown = ({
   searchPlaceholder = "검색...",
   onSelect,
   customStyle, // 추가 스타일을 받을 props
+  value, // 외부에서 선택된 값을 제어할 수 있는 value prop
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const ref = useRef(null);
+
+  // 내부 selected 상태는 value prop이 없을 때만 사용
+  const isControlled = value !== undefined && value !== null;
+  const selected = isControlled
+    ? options.find(
+      (opt) => opt.value === value || opt.label === value
+    ) || null
+  : null;
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
   const handleSelect = (option) => {
-    setSelected(option);
     setSearchTerm("");
     setIsOpen(false);
     if (onSelect) onSelect(option);

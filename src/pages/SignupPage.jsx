@@ -6,7 +6,8 @@ import CircleButton from "../components/button/CircleButton";
 import Inputfield from "../components/Inputfield";
 import SearchDropdown from "../components/SearchDropdown";
 import Dropdown from "../components/Dropdown";
-import { SignupAPI, CountriesAPI, UniversitiesAPI, ExchangeUniversitiesAPI } from "@/apis";
+import { SignupAPI } from "@/apis";
+import { useDropdownData } from "@/hooks";
 
 // 회원가입 페이지용 인풋 스타일
 const signupInputStyle = {
@@ -56,14 +57,17 @@ const errorButtonStyle = {
   borderColor: "var(--red)"
 }
 
-const typeList = [
-    { label: "교환학생", value: "교환학생" },
-    { label: "방문학생", value: "방문학생" },
-    { label: "기타", value: "기타" },
-]
-
 const SignupPage = () => {
   const navigate = useNavigate();
+
+  // 커스텀 훅으로 드롭다운 데이터 관리
+  const {
+    univList,
+    countryList,
+    exUnivList,
+    typeList,
+    filterExchangeUniversitiesByCountry
+  } = useDropdownData();
 
   const [id, setId] = useState(""); // 아이디 값
   const [idError, setIdError] = useState(""); // 아이디 에러 메시지
@@ -98,70 +102,10 @@ const SignupPage = () => {
   const [period, setPeriod] = useState(""); // 선택된 파견기간
   const [periodError, setPeriodError] = useState(""); // 파견기간 에러 메시지
 
-  // API에서 목록들 불러오기
-  const [univList, setUnivList] = useState([]);
-  const [countryList, setCountryList] = useState([]);
-  const [exUnivList, setExUnivList] = useState([]);
-  const [allExUnivs, setAllExUnivs] = useState([]); // 전체 파견학교 목록 저장
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 본교 목록
-        const univRes = await UniversitiesAPI.universities();
-        const formattedUnivs = univRes.data
-          .filter(univ => univ.univ_name && univ.univ_name.length > 2) // 이상한 데이터 필터링
-          .map(univ => ({
-            label: univ.univ_name,
-            value: univ.id
-          }));
-        setUnivList(formattedUnivs);
-
-        // 파견 국가 목록
-        const countryRes = await CountriesAPI.countries();
-        const formattedCountries = countryRes.data.map(country => ({
-          label: country.label,
-          value: country.code
-        }));
-        setCountryList(formattedCountries);
-
-        // 파견 학교 목록 (전체 저장)
-        const exUnivRes = await ExchangeUniversitiesAPI.exUniversities();
-        setAllExUnivs(exUnivRes.data); // 원본 데이터 저장
-        
-        // 초기에는 전체 파견학교 목록 표시
-        const formattedExUnivs = exUnivRes.data.map(univ => ({
-          label: univ.univ_name,
-          value: univ.id
-        }));
-        setExUnivList(formattedExUnivs);
-      } catch(err) {
-        console.error("목록 불러오기 실패:", err);
-      }
-    };
-    fetchData();
-  }, []);
-
   // 선택된 국가에 따라 파견학교 목록 필터링
   useEffect(() => {
-    if (country) {
-      const countryCode = country.value || country; // country가 객체면 value 사용
-      const filteredUnivs = allExUnivs
-        .filter(univ => univ.country === countryCode)
-        .map(univ => ({
-          label: univ.univ_name,
-          value: univ.id
-        }));
-      setExUnivList(filteredUnivs);
-    } else {
-      // 국가 선택 안한 경우 전체 목록 표시
-      const formattedExUnivs = allExUnivs.map(univ => ({
-        label: univ.univ_name,
-        value: univ.id
-      }));
-      setExUnivList(formattedExUnivs);
-    }
-  }, [country, allExUnivs]);
+    filterExchangeUniversitiesByCountry(country);
+  }, [country]);
 
   const onClick = async () => {
     try {
@@ -172,12 +116,12 @@ const SignupPage = () => {
           passwordConfirm: passwordCheck,
           nickname: nickname,
           gender: gender,
-          homeUniversity: univ.value || univ,
+          homeUniversity: univ?.label,
         },
         dispatch:{
-          country: country.value || country,
-          hostUniversity: exUniv.value || exUniv,
-          dispatchType: type,
+          country: country?.label || country,
+          hostUniversity: exUniv?.label,
+          dispatchType: type?.label || type, // 한글명
           term:  time,
           duration: period,
         }
@@ -217,7 +161,7 @@ const SignupPage = () => {
   }
 
   // 각 인풋필드에 대한 ref 생성 (13개 필드)
-  const inputRefs = Array.from({length: 13}, () => useRef(null));
+  const inputRefs = useRef(Array.from({length: 13}, () => React.createRef()));
   
   // 통합 키보드 핸들러
   const handleKeyDown = (e, currentIndex) => {
@@ -404,16 +348,16 @@ const SignupPage = () => {
           <ButtonContainer>
             <CircleButton 
               ref={inputRefs[4]}
-              onClick={() => handleGenderSelect("남성")}
-              customStyle={gender === "남성" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
+              onClick={() => handleGenderSelect("M")}
+              customStyle={gender === "M" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
               onKeyDown={(e) => handleKeyDown(e, 4)}
             >
               남성
             </CircleButton>
             <CircleButton 
               ref={inputRefs[5]}
-              onClick={() => handleGenderSelect("여성")}
-              customStyle={gender === "여성" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
+              onClick={() => handleGenderSelect("F")}
+              customStyle={gender === "F" ? signupButtonClickedStyle : (genderError ? errorButtonStyle : signupButtonStyle)}
               onKeyDown={(e) => handleKeyDown(e, 5)}
             >
               여성
@@ -430,6 +374,7 @@ const SignupPage = () => {
             options={univList}
             placeholder="본교 선택"
             searchPlaceholder="학교를 검색하세요"
+            value={univ?.value}
             onSelect={handleUnivSelect}
             customStyle={univError ? errorDropStyle : signupDropStyle}
             onKeyDown={(e) => handleKeyDown(e, 6)}
@@ -448,6 +393,7 @@ const SignupPage = () => {
             options={countryList}
             placeholder="파견 국가 선택"
             searchPlaceholder="파견 국가를 검색하세요"
+            value={country?.value}
             onSelect={handleCountrySelect}
             customStyle={countryError ? errorDropStyle : signupDropStyle}
             onKeyDown={(e) => handleKeyDown(e, 7)}
@@ -463,6 +409,7 @@ const SignupPage = () => {
             options={exUnivList}
             placeholder="파견 학교 선택"
             searchPlaceholder="파견 학교를 검색하세요"
+            value={exUniv?.value}
             onSelect={handleExUnivSelect}
             customStyle={exUnivError ? errorDropStyle : signupDropStyle}
             onKeyDown={(e) => handleKeyDown(e, 8)}
@@ -477,6 +424,7 @@ const SignupPage = () => {
             ref={inputRefs[9]}
             options={typeList}
             placeholder="파견 유형 선택"
+            value={type?.value}
             onSelect={handleTypeSelect}
             customStyle={typeError ? errorDropStyle : signupDropStyle}
             onKeyDown={(e) => handleKeyDown(e, 9)}

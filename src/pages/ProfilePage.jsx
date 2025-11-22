@@ -1,9 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Inputfield from "../components/Inputfield";
 import SearchDropdown from "../components/SearchDropdown";
 import Dropdown from "../components/Dropdown";
+import Spinner from '../components/Spinner';
+import { useDropdownData, useProfile } from "@/hooks";
+import { ProfileAPI } from "@/apis";
 
 // 프로필 페이지용 인풋 스타일
 const profileInputStyle = {
@@ -13,51 +16,111 @@ const profileInputStyle = {
   fontWeight: "500",
 }
 
-const userInfo = ["미국", "화연이에연", "ewhaewhalikelion", "이화여자대학교"];
-const exInfo = ["미국", "교환학생", "University of California, Davis", "24학년도 2학기", "5개월"];
-
 const ProfilePage = () => {
-  // build flag src safely (encode in case of non-ascii names)
-  const flagSrc = `/images/flags/${encodeURIComponent(userInfo[0])}.png`;
+  const { profile, setProfile } = useProfile();
+
+  // 커스텀 훅으로 드롭다운 데이터 관리
+  const {
+    countryList,
+    exUnivList,
+    allExUnivs,
+    typeList,
+    filterExchangeUniversitiesByCountry
+  } = useDropdownData();
+
   const [editMode, setEditMode] = useState(false);
-  const [exData, setExData] = useState(exInfo);
 
-  const toggleEdit = () => setEditMode((s) => !s);
+  // 수정용 데이터
+  const [editData, setEditData] = useState(null);
 
-  const handleExChange = (idx) => (e) => {
-    const next = [...exData]; // 배열을 복사(불변성 유지)
-    next[idx] = e.target.value; // 해당 인덱스의 값을 사용자가 입력한 값으로 교체
-    setExData(next); //상태 업데이트 -> 리렌더링
+  // profile 불러오면 editData 초기화
+  useEffect(() => {
+    if (!profile || countryList.length === 0 || allExUnivs.length === 0) return;
+
+    const matchedCountry = countryList.find(
+      c => c.label === profile.exchange_country
+    );
+
+    filterExchangeUniversitiesByCountry(matchedCountry?.value);
+
+    const matchedUniv = allExUnivs.find(
+      u => u.univ_name === profile.exchange_university
+    );
+
+    setEditData({
+      exchange_country: matchedCountry ?? "",
+      exchange_type: typeList.find(t => t.label === profile.exchange_type) ?? "",
+      exchange_university: matchedUniv
+        ? { label: matchedUniv.univ_name, value: matchedUniv.id }
+        : "",
+      exchange_semester: profile.exchange_semester,
+      exchange_period: profile.exchange_period,
+    });
+  }, [profile, countryList, allExUnivs]);
+
+  if (!profile) {
+    return (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+        <Spinner />
+      </div>
+    );
+  }
+
+  const country = profile.exchange_country;
+
+  // build flag src safely (encode in case of non-ascii names)
+  const flagSrc = `/images/flags/${encodeURIComponent(profile.exchange_country)}.png`;
+
+  // 입력 필드 변경
+  const handleEditChange = (key) => (e) => {
+    setEditData(prev => ({ ...prev, [key]: e.target.value }));
   };
 
-  const handleDropdownSelect = (idx) => (option) => {
-    const next = [...exData];
-    next[idx] = option.label; // 드롭다운 선택값 저장
-    setExData(next);
+  // 드롭다운 선택 처리
+  const handleDropdownSelect = (key) => (option) => {
+    setEditData(prev => ({
+      ...prev,
+      [key]: option
+    }));
+
+    if (key === "exchange_country") {
+      filterExchangeUniversitiesByCountry(option.value);
+    }
   };
 
-  // 드롭다운 옵션 예시 (실제로는 API나 데이터에서 가져올 수 있음)
-  const countryOptions = [
-    { label: "미국", value: "us" },
-    { label: "일본", value: "jp" },
-    { label: "중국", value: "cn" },
-    { label: "영국", value: "uk" },
-    { label: "프랑스", value: "fr" },
-  ];
-
-  const typeOptions = [
-    { label: "교환학생", value: "교환학생" },
-    { label: "방문학생", value: "방문학생" },
-    { label: "기타", value: "기타" },
-  ];
-
-  const schoolOptions = [
-    { label: "University of California, Davis", value: "ucd" },
-    { label: "University of Tokyo", value: "ut" },
-    { label: "Peking University", value: "pku" },
-    { label: "University of Oxford", value: "oxford" },
-    { label: "Sorbonne University", value: "sorbonne" },
-  ];
+  const toggleEdit = async () => {
+    if (!editMode) {
+      setEditMode(true);
+      return;
+    }
+    try {
+      const payload = {
+        exchange_country: editData.exchange_country.label, // 국가명 문자열
+        exchange_type: editData.exchange_type.value,       // 코드 (EX/VS/OT)
+        exchange_univ: editData.exchange_university.label, // 대학명 문자열
+        exchange_semester: editData.exchange_semester,
+        exchange_period: editData.exchange_period,
+      };
+      console.log("payload:", payload)
+      const res = await ProfileAPI.updateProfile(payload);
+      console.log("res:", res)
+      
+      setProfile(res.data);
+      setEditMode(false);
+    } catch (err) {
+      console.error(err);
+      alert("프로필 업데이트 실패");
+}
+  };
 
   return(
     <Wrapper>
@@ -67,12 +130,12 @@ const ProfilePage = () => {
             <Flag>
                 <img
                   src={flagSrc}
-                  alt={userInfo[0]}
+                  alt={profile.exchange_country}
                 />
             </Flag>
             <TextContainer>
-                <h3>{userInfo[1]} (@{userInfo[2]})</h3>
-                <p className="body1">{userInfo[3]}</p>
+                <h3>{profile.name} (@{profile.user_id})</h3>
+                <p className="body1">{profile.university}</p>
             </TextContainer>
           </Container>
         </Box>
@@ -101,48 +164,76 @@ const ProfilePage = () => {
         </EditContainer>
         <Box>
           {editMode ? (
-            exData.map((val, idx) => (
-              <Input key={idx}>
-                <h3>{['파견 국가','파견 유형','파견 학교','파견 시기','파견 기간'][idx]}</h3>
-                {idx === 0 ? (
-                  <SearchDropdown
-                    options={countryOptions}
-                    placeholder={val}
-                    searchPlaceholder="파견 국가를 검색하세요"
-                    onSelect={handleDropdownSelect(idx)}
-                    customStyle={profileInputStyle}
-                  />
-                ) : idx === 1 ? (
-                  <Dropdown
-                    options={typeOptions}
-                    placeholder={val}
-                    onSelect={handleDropdownSelect(idx)}
-                    customStyle={profileInputStyle}
-                  />
-                ) : idx === 2 ? (
-                  <SearchDropdown
-                    options={schoolOptions}
-                    placeholder={val}
-                    searchPlaceholder="파견 학교를 검색하세요"
-                    onSelect={handleDropdownSelect(idx)}
-                    customStyle={profileInputStyle}
-                  />
-                ) : (
-                  <Inputfield 
-                    customStyle={profileInputStyle}
-                    value={val} 
-                    onChange={handleExChange(idx)} 
-                  />
-                )}
+            <>
+              <Input>
+                <h3>파견 국가</h3>
+                <SearchDropdown
+                  options={countryList}
+                  value={editData.exchange_country?.value ?? ""}
+                  searchPlaceholder="파견 국가를 검색하세요"
+                  onSelect={handleDropdownSelect("exchange_country")}
+                  customStyle={profileInputStyle}
+                />
               </Input>
-            ))
+              <Input>
+                <h3>파견 유형</h3>
+                <Dropdown
+                  options={typeList}
+                  value={editData.exchange_type?.value ?? ""}
+                  onSelect={handleDropdownSelect("exchange_type")}
+                  customStyle={profileInputStyle}
+                />
+              </Input>
+              <Input>
+                <h3>파견 학교</h3>
+                <SearchDropdown
+                  options={exUnivList}
+                  value={editData.exchange_university?.value ?? ""}
+                  searchPlaceholder="파견 학교를 검색하세요"
+                  onSelect={handleDropdownSelect("exchange_university")}
+                  customStyle={profileInputStyle}
+                />
+              </Input>
+              <Input>
+                <h3>파견 시기</h3>
+                <Inputfield 
+                  customStyle={profileInputStyle}
+                  value={editData.exchange_semester} 
+                  onChange={handleEditChange("exchange_semester")} 
+                />
+              </Input>
+              <Input>
+                <h3>파견 기간</h3>
+                <Inputfield 
+                  customStyle={profileInputStyle}
+                  value={editData.exchange_period} 
+                  onChange={handleEditChange("exchange_period")} 
+                />
+              </Input>
+            </>
           ) : (
-            exData.map((val, idx) => (
-              <Input key={idx}>
-                <h3>{['파견 국가','파견 유형','파견 학교','파견 시기','파견 기간'][idx]}</h3>
-                <p className="body1">{val}</p>
+            <>
+              <Input>
+                <h3>파견 국가</h3>
+                <p className="body1">{profile.exchange_country}</p>
               </Input>
-            ))
+              <Input>
+                <h3>파견 유형</h3>
+                <p className="body1">{profile.exchange_type}</p>
+              </Input>
+              <Input>
+                <h3>파견 학교</h3>
+                <p className="body1">{profile.exchange_university}</p>
+              </Input>
+              <Input>
+                <h3>파견 시기</h3>
+                <p className="body1">{profile.exchange_semester}</p>
+              </Input>
+              <Input>
+                <h3>파견 기간</h3>
+                <p className="body1">{profile.exchange_period}</p>
+              </Input>
+            </>
           )}
         </Box>
         <Button>
