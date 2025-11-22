@@ -46,15 +46,12 @@ function App() {
           {/* UploadTopbar(뒤로가기+게시하기) */}
           <Route element={<UploadLayout />}>
             <Route path="/accountbook" element={<AccountbookPage />} />
-            <Route path="/profile" element={<ProfilePage/>} />
           </Route>
 
           {/* BackTopbar(뒤로가기) */}
           <Route element={<BackLayout />}>
-            <Route
-              path="/summaries/profile"
-              element={<AcctSummaryProfileData />}
-            />
+            <Route path="/profile" element={<ProfilePage/>} />
+            <Route path="/summaries/profile" element={<AcctSummaryProfileData />} />
           </Route>
 
           {/* Topbar X */}
