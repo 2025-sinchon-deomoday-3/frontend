@@ -28,7 +28,7 @@ import AccountbookPage from "./pages/AccountbookPage";
 import AcctSummaryLoading from "./pages/AcctSummaryLoading";
 import AcctSummaryComplete from "./pages/AcctSummaryComplete";
 import AcctSummaryProfileData from "./pages/AcctSummaryProfileData";
-// import AcctSummaryPage from "./pages/AcctSummaryPage";
+import AcctSummaryPage from "./pages/AcctSummaryPage";
 
 function App() {
   return (
@@ -62,7 +62,7 @@ function App() {
           {/* 가계부 요약본 */}
           <Route path="/summaries/loading" element={<AcctSummaryLoading />} />
           <Route path="/summaries/complete" element={<AcctSummaryComplete />} />
-          {/* <Route path="/summaries/snapshot" element={<AcctSummaryPage />} />*/}
+          <Route path="/summaries/snapshot" element={<AcctSummaryPage />} />
         </Routes>
       </Router>
     </>
