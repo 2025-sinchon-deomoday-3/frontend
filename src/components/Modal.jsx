@@ -11,8 +11,6 @@ const Modal = ({
   cancelText = "취소", // Cancel 버튼 텍스트
   showCancelButton = true, // Cancel 버튼 표시 O/X
   showImage = true, // 이미지 표시 O/X
-  customContentStyle = "", // content 커스텀 스타일
-  customSubtextStyle = "", // subtext 커스텀 스타일
   onAction,
   onCancel,
   onClose,
@@ -45,13 +43,9 @@ const Modal = ({
       <ModalContainer>
         <ModalContentWrapper>
           {showImage && <StyledModalImage src={ModalAlertImage} alt="알림" />}
-          <ModalContent customStyle={customContentStyle}>
-            {content}
-          </ModalContent>
+          <h2>{content}</h2>
           {subtext && (
-            <Modalsubtext customStyle={customSubtextStyle}>
-              {subtext}
-            </Modalsubtext>
+            <span className="body1">{subtext}</span>
           )}
         </ModalContentWrapper>
 
@@ -59,16 +53,16 @@ const Modal = ({
           {showCancelButton && (
             <Button
               onClick={handleCancel}
-              customStyle={`background: var(--light-gray, #f4f4f4); max-height: fit-content; padding : 0 0 0.6rem 0;`}
+              customStyle={`background: var(--light-gray, #f4f4f4); color: var(--black); height: 2.55469rem; display: flex; justify-content: center; align-items: center;`}
             >
-              <SCanceltext>{cancelText}</SCanceltext>
+              <span className="body1" style={{width: '100%', textAlign: 'center'}}>{cancelText}</span>
             </Button>
           )}
           <Button
             onClick={handleAction}
-            customStyle={` max-height: fit-content; padding : 0 0 0.6rem 0;`}
+            customStyle={`height: 2.55469rem; display: flex; justify-content: center; align-items: center;`}
           >
-            <SActiontext>{actionText}</SActiontext>
+            <span className="body1" style={{width: '100%', textAlign: 'center'}}>{actionText}</span>
           </Button>
         </ButtonContainer>
       </ModalContainer>
@@ -113,30 +107,16 @@ const ModalContentWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+
+  .body1{
+    color: var(--gray);
+  }
 `;
 
 const StyledModalImage = styled.img`
   width: 2rem;
   height: 2rem;
   flex-shrink: 0;
-`;
-
-const Modalsubtext = styled.p.attrs({
-  className: "body1", // 상속으로 미리 정의해놓은 갖다쓰기
-})`
-  color: var(--gray, #a5a5a5); // 색상은 다르길래 따로 지정
-  text-align: center;
-  ${({ $customStyle }) => $customStyle && $customStyle}
-`;
-
-const ModalContent = styled.p`
-  color: var(--black, #000);
-  font-family: var(--body-font-family);
-  font-size: 1.25rem;
-  font-weight: 500;
-  text-align: center;
-  white-space: pre-wrap;
-  ${({ $customStyle }) => $customStyle && $customStyle}
 `;
 
 //
@@ -149,16 +129,4 @@ const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-`;
-
-const SActiontext = styled.span.attrs({
-  className: "body1", // 얘도 마찬가지로, 미리 정의해놓은 거 가져다 사용
-})`
-  color: var(--white, #fff);
-`;
-
-const SCanceltext = styled.span.attrs({
-  className: "body1", // 이하동일
-})`
-  color: var(--black, #000);
 `;
