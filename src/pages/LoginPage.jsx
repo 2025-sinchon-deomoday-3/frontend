@@ -217,7 +217,7 @@ const LoginPage = () => {
         <SquareButton
           onClick={handleLogin}
         >
-          로그인
+          <span className="h2">로그인</span>
         </SquareButton>
 
         <Container>
