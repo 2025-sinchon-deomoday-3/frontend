@@ -1,14 +1,33 @@
-import React, { useState, forwardRef } from "react";
+import React, { useState} from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { FeedsActionAPI } from "@/apis";
 
-const userInfo = ["미국", "화연이에연", "ewhaewhalikelion", "이화여자대학교"];
-
-const Feed = () => {
-  const [isScraped, setIsScraped] = useState(false);
+const Feed = (feed) => {
+  const navigate = useNavigate();
+  const [isScraped, setIsScraped] = useState(feed.is_scraped); // API에서 스크랩 여부 제공 시
   
-  const handleScrapClick = (e) => {
+  const handleScrapClick = async (e) => {
     e.stopPropagation(); // 이벤트 전파 중단 - Box 클릭 이벤트가 실행되지 않음
-    setIsScraped((prev) => !prev); // 상태 반전 (true ↔ false)
+    try {
+      if (!isScraped) {
+        const res = await FeedsActionAPI.addScrap(feed.id);
+        setIsScraped(true);
+      } else {
+        const res = await FeedsActionAPI.removeScrap(feed.id);
+        setIsScraped(false);
+      }
+    } catch (err) {
+      console.log(err);
+      if (err.response?.status === 401) {
+        alert("로그인 후 이용 가능합니다.");
+        navigate("/login");
+      } else if (err.response?.data?.message === "이미 스크랩된 항목입니다.") {
+        alert("이미 스크랩된 항목입니다.");
+      } else {
+        alert("스크랩 처리에 실패했습니다.");
+      }
+    }
   };
 
   const handleFeedClick = () => {
@@ -17,43 +36,49 @@ const Feed = () => {
     // navigate('/feed-detail'); // 예시
   };
 
-  const flagSrc = `/images/flags/${encodeURIComponent(userInfo[0])}.png`;
+  const flagSrc = `/images/flags/${encodeURIComponent(feed.country)}.png`;
   
   return(
     <Box onClick={handleFeedClick}>
       <User>
         <UserProfile>
           <Flag>
-            <img src={flagSrc} alt={userInfo[0]}/>
+            <img src={flagSrc} alt={feed.country}/>
           </Flag>
-          <Type>방문학생</Type>
+          <Type exchangeType={feed.exchange_type}>{feed.exchange_type}</Type>
         </UserProfile>
         <UserText>
-          <p className="body1">화연이에연 / 여</p>
-          <h2>미국 University of California, Davis</h2>
-          <p className="body1">25년도 1학기 (5개월)</p>
+          <p className="body1">{feed.nickname} / {feed.gender}</p>
+          <h2>{feed.country} {feed.university}</h2>
+          <p className="body1">{feed.exchange_semester} ({feed.exchange_period})</p>
         </UserText>
         <ScrapBtn onClick={handleScrapClick} $isScraped={isScraped}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" viewBox="0 0 20 25" fill="none">
             <path d="M10 22.0125L3.77 24.7515C2.87222 25.1466 2.01944 25.0706 1.21167 24.5232C0.403889 23.977 0 23.2133 0 22.2322V2.75262C0 1.96794 0.257222 1.31329 0.771666 0.788653C1.28611 0.26402 1.92667 0.00113557 2.69333 0H17.3083C18.075 0 18.7156 0.262884 19.23 0.788653C19.7444 1.31442 20.0011 1.96908 20 2.75262V22.2322C20 23.2133 19.5961 23.977 18.7883 24.5232C17.9806 25.0706 17.1278 25.1466 16.23 24.7515L10 22.0125ZM10 20.0996L16.8917 23.1384C17.2328 23.2917 17.5583 23.2593 17.8683 23.0413C18.1783 22.8221 18.3333 22.5269 18.3333 22.1556V2.75433C18.3333 2.49201 18.2267 2.25127 18.0133 2.0321C17.8 1.81294 17.5644 1.70336 17.3067 1.70336H2.69333C2.43667 1.70336 2.20111 1.81237 1.98667 2.0304C1.77222 2.24843 1.66556 2.48917 1.66667 2.75262V22.1573C1.66667 22.5286 1.82167 22.8233 2.13167 23.0413C2.44167 23.2593 2.76722 23.2917 3.10833 23.1384L10 20.0996ZM10 1.70336H1.66667H18.3333H10Z" fill={isScraped ? "var(--blue)" : "var(--gray)"}/>
             <path d="M10 20.0996L16.8917 23.1384C17.2328 23.2917 17.5583 23.2593 17.8683 23.0413C18.1783 22.8221 18.3333 22.5269 18.3333 22.1556V2.75433C18.3333 2.49201 18.2267 2.25127 18.0133 2.0321C17.8 1.81294 17.5644 1.70336 17.3067 1.70336H10H2.69333C2.43667 1.70336 2.20111 1.81237 1.98667 2.0304C1.77222 2.24843 1.66556 2.48917 1.66667 2.75262V22.1573C1.66667 22.5286 1.82167 22.8233 2.13167 23.0413C2.44167 23.2593 2.76722 23.2917 3.10833 23.1384L10 20.0996Z" fill={isScraped ? "var(--blue)" : "none"}/>
           </svg>
-          {!isScraped && <p className="body1">15</p>}
+          {!isScraped && <p className="body1">{feed.scrap_count}</p>}
         </ScrapBtn>
       </User>
       <Cost>
         <CostSection>
           <p className="body2">총 파견 비용</p>
           <CostText>
-            <h3>1050만 6530원</h3>
-            <h3 className="dblue">$7,451</h3>
+            <h3>{Number(feed.base_dispatch_krw_amount).toLocaleString()}원</h3>
+            <h3 className="dblue">{feed.base_dispatch_foreign_currency
+              ? `${feed.base_dispatch_foreign_amount} ${feed.base_dispatch_foreign_currency}`
+              : `$${feed.base_dispatch_foreign_amount}`}
+            </h3>
           </CostText>
         </CostSection>
         <CostSection>
           <p className="body2">한달 평균 생활비</p>
           <CostText>
-            <h3>150만 3000원</h3>
-            <h3 className="dblue">$1,065</h3>
+            <h3>{Number(feed.living_expense_krw_amount).toLocaleString()}원</h3>
+            <h3 className="dblue">{feed.living_expense_foreign_currency
+              ? `${feed.living_expense_foreign_amount} ${feed.living_expense_foreign_currency}`
+              : `$${feed.living_expense_foreign_amount}`}
+            </h3>
           </CostText>
         </CostSection>
       </Cost>
@@ -139,7 +164,8 @@ const Type = styled.div`
   align-items: center;
   justify-content: center;
 
-  background: var(--visiting);
+  background: ${({ exchangeType }) => exchangeType === "교환학생" ? "var(--exchange)" : "var(--visiting)"};
+  
   border-radius: 2.5rem;
 
   font-family: "Pretendard Variable";
