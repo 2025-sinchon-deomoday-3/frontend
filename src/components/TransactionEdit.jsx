@@ -181,9 +181,10 @@ const TransactionEdit = forwardRef(
                 </LabelRow>
                 <Dropdown
                   options={paymentMethodOptions}
+                  value={formData.payment_method}
                   placeholder={paymentMethodOptions[0].label}
-                  onSelect={(option) =>
-                    handleInputChange("payment_method", option.value)
+                  onSelect={(value) =>
+                    handleInputChange("payment_method", value)
                   }
                   customStyle={`
                 min-width: 100%;
@@ -204,10 +205,9 @@ const TransactionEdit = forwardRef(
               </LabelRow>
               <Dropdown
                 options={categoryOptions}
+                value={formData.category}
                 placeholder={categoryOptions[0].label}
-                onSelect={(option) =>
-                  handleInputChange("category", option.value)
-                }
+                onSelect={(value) => handleInputChange("category", value)}
                 customStyle={`
                 height: 2.53125rem;
                 font-size: 0.84375rem;
@@ -233,10 +233,9 @@ const TransactionEdit = forwardRef(
               </LabelRow>
               <Dropdown
                 options={currencyOptions}
+                value={formData.currency_code}
                 placeholder={currencyOptions[0].label}
-                onSelect={(option) =>
-                  handleInputChange("currency_code", option.value)
-                }
+                onSelect={(value) => handleInputChange("currency_code", value)}
                 customStyle={`
                 height: 2.53125rem;
                 font-size: 0.84375rem;
@@ -261,7 +260,7 @@ const TransactionEdit = forwardRef(
               color: var(--white);
             `}
             >
-              <span className="h2">등록하기</span>
+              <span style={{ color: "var(--white)" }}>등록하기</span>
             </Button>
           </RegisterButtonContainer>
         )}
