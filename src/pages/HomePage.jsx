@@ -1,10 +1,12 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Inputfield from "../components/Inputfield";
 import Feed from "../components/Feed";
-
-const userInfo = ["미국", "화연이에연", "여", "이화여자대학교"];
+import Modal from "../components/Modal";
+import Spinner from '../components/Spinner';
+import { FeedsAPI } from '@/apis';
+import { useProfile } from "@/hooks";
 
 const HomeInputStyle = {
   width: "100%",
@@ -27,17 +29,73 @@ const HomePlaceholderStyle = {
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const profileClicked = () => {
-    navigate('/profile');
-}
-
-
-  const flagSrc = `/images/flags/${encodeURIComponent(userInfo[0])}.png`;
-
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
+  const { profile } = useProfile();
+  const effectiveProfile = isLoggedIn ? profile : null;
   const [sort, setSort] = useState("latest"); // 선택된 정렬방법 (latest: 최신순, scrap: 스크랩 많은 순)
+  const [feeds, setFeeds] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  // Feed에서 scrap/un-scrap 시 호출되는 핸들러
+  const fetchFeeds = async () => {
+    try {
+      let data;
+      if (sort === "latest") {
+        data = await FeedsAPI.getFeeds();
+      } else {
+        data = await FeedsAPI.getPopularFeeds();
+      }
+      setFeeds(data.data);
+    } catch (err) {
+      setFeeds([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleScrapChange = () => {
+    fetchFeeds();
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchFeeds();
+  }, [sort]);
+
+  // 로그인/로그아웃 상태 변화 감지하여 isLoggedIn 갱신
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!localStorage.getItem("token"));
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const handleSortClick = (sortType) => {
     setSort(sortType);
   };
+
+  const profileClicked = () => {
+    if(effectiveProfile){
+      navigate('/profile');
+    } else {
+      setShowModal(true);
+    }
+  };
+
+  const handleModalAction = () => {
+    setShowModal(false);
+    navigate('/login');
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const flagSrc = effectiveProfile ? `/images/flags/${encodeURIComponent(effectiveProfile.exchange_country)}.png` : '';
 
   return(
     <Wrapper>
@@ -73,10 +131,27 @@ const HomePage = () => {
           </Sort>    
         </Top>
         <Feeding>
-          <Feed/>
-          <Feed/>
-          <Feed/>
-          <Feed/>
+          {loading ? (
+            <div style={{
+              width: "100%",
+              height: "80%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}>
+              <Spinner />
+            </div>
+          ) : feeds && feeds.length > 0 ? (
+            feeds.map(feed => (
+              <Feed
+                key={feed.id}
+                {...feed}
+                onScrapChange={handleScrapChange}
+              />
+            ))
+          ) : (
+            <NoFeedMsg>피드가 없습니다.</NoFeedMsg>
+          )}
         </Feeding>
       </Left>
       <Right>
@@ -84,11 +159,11 @@ const HomePage = () => {
           <h2>프로필</h2>
           <ProfileButton onClick={profileClicked}>
             <Flag>
-                <img src={flagSrc} alt={userInfo[0]}/>
+                {effectiveProfile ? (<img src={flagSrc} alt={effectiveProfile.exchange_country}/>) : null}
             </Flag>
             <TextContainer>
-                <h3>{userInfo[1]} / {userInfo[2]}</h3>
-                <p className="body1">{userInfo[3]}</p>
+                <h3>{effectiveProfile ? `${effectiveProfile.name} / ${effectiveProfile.gender}` : '로그인하지 않았습니다.'}</h3>
+                <p className="body1">{effectiveProfile ? effectiveProfile.university : '일부 기능이 제한됩니다.'}</p>
             </TextContainer>
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
                 <path d="M21.3021 12.4999L13.6458 20.1562C13.3854 20.4166 13.2594 20.7204 13.2677 21.0676C13.276 21.4149 13.4108 21.7187 13.6719 21.9791C13.933 22.2395 14.2368 22.3697 14.5833 22.3697C14.9299 22.3697 15.2337 22.2395 15.4948 21.9791L23.5156 13.9843C23.724 13.776 23.8802 13.5416 23.9844 13.2812C24.0885 13.0208 24.1406 12.7603 24.1406 12.4999C24.1406 12.2395 24.0885 11.9791 23.9844 11.7187C23.8802 11.4583 23.724 11.2239 23.5156 11.0156L15.4948 2.99472C15.2344 2.73431 14.926 2.60827 14.5698 2.6166C14.2135 2.62493 13.9056 2.75965 13.6458 3.02077C13.3861 3.28188 13.2559 3.5857 13.2552 3.93222C13.2545 4.27875 13.3847 4.58257 13.6458 4.84368L21.3021 12.4999Z" fill="#A5A5A5"/>
@@ -97,6 +172,16 @@ const HomePage = () => {
         </Profile>
         <img className="ad" src="/images/Advertising.png" alt="advertising" />
       </Right>
+      {showModal && (
+        <Modal
+          isOpen={showModal}
+          content="로그인이 필요한 기능입니다."
+          cancelText="닫기"
+          actionText="로그인하러 가기"
+          onClose={handleCloseModal}
+          onAction={handleModalAction}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -204,6 +289,15 @@ const Feeding = styled.div`
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
+`
+
+const NoFeedMsg = styled.div`
+    width: 100%;
+    padding: 5rem 0;
+    text-align: center;
+    color: var(--gray);
+    font-size: 1.2rem;
+    font-weight: 500;
 `
 
 const Right = styled.div`

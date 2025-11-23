@@ -1,21 +1,67 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import Inputfield from "../components/Inputfield";
 import Feed from "../components/Feed";
+import Spinner from "../components/Spinner";
+import { FeedsActionAPI } from "@/apis";
 
 const ScrapbookPage = () => {
+  const [scraps, setScraps] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchScraps = async () => {
+    try {
+      const res = await FeedsActionAPI.getMyScraps();
+      setScraps(res.data);
+    } catch (err) {
+      if (err.response?.status === 401) {
+        alert("로그인 후 이용 가능합니다.");
+        navigate("/login");
+      } else {
+        alert("스크랩 목록을 불러오지 못했습니다.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchScraps();
+  }, []);
+
+  const handleScrapChange = () => {
+    fetchScraps();
+  };
+
   const navigate = useNavigate();
 
-  return(
+  return (
     <Wrapper>
-      <Left> 
+      <Left>
         <p className="page">스크랩북</p>
         <Feeding>
-          <Feed/>
-          <Feed/>
-          <Feed/>
-          <Feed/>
+          {loading ? (
+            <div style={{
+              width: "100%",
+              height: "80%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}>
+              <Spinner />
+            </div>
+          ) : scraps.length === 0 ? (
+            <NoScrapMsg>스크랩한 목록이 없습니다.</NoScrapMsg>
+          ) : (
+            scraps.map((feed) => (
+              <Feed 
+                key={feed.id} 
+                {...feed} 
+                onScrapChange={handleScrapChange}
+              />
+            ))
+          )}
         </Feeding>
       </Left>
       <Right>
@@ -84,6 +130,15 @@ const Feeding = styled.div`
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
+`
+
+const NoScrapMsg = styled.div`
+    width: 100%;
+    padding: 5rem 0;
+    text-align: center;
+    color: var(--gray);
+    font-size: 1.2rem;
+    font-weight: 500;
 `
 
 const Right = styled.div`

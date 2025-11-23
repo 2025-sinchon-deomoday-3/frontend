@@ -12,6 +12,11 @@ export const useProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setProfile(null);
+      return;
+    }
     const fetchProfile = async () => {
       try {
         const res = await ProfileAPI.getProfile();
