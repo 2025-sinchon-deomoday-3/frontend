@@ -439,6 +439,13 @@ const PageWrapper = styled.div`
   padding-top: 5.5rem;
 `;
 
+const ContentWrapper = styled.div`
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
 const Title = styled.h1`
   color: var(--black);
   font-size: 1.75rem;
@@ -573,13 +580,6 @@ const BtnBox = styled.div`
 
 //
 // —————————————————————————— (세부 프로필) ——————————————————————————
-
-const ContentWrapper = styled.div`
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
 
 const FormGrid = styled.div`
   display: flex;
